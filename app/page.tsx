@@ -193,11 +193,11 @@ export default function Home() {
     <div className="min-h-screen bg-[#0a0a0a] overflow-x-hidden">
       <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <motion.a href="#" className="flex items-center gap-3" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <picture><source srcSet="/logo.avif" type="image/avif" /><img src="/logo-old.svg" alt="Auto Spa 1 Logo" className="h-12 sm:h-14 w-auto object-contain" /></picture>
+          <div className="flex items-center justify-center h-20 md:grid md:grid-cols-3 relative">
+            <motion.a href="#" className="flex items-center justify-center md:col-start-2" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <picture><source srcSet="/logo.avif" type="image/avif" /><img src="/logo-old.svg" alt="Auto Spa 1 Logo" className="h-16 sm:h-20 w-auto object-contain" /></picture>
             </motion.a>
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-8 justify-end md:col-start-3">
               {["Services", "Gallery", "Pricing", "Reviews", "Contact"].map((item) => (
                 <motion.button key={item} onClick={() => scrollToSection(item.toLowerCase())} className="text-sm text-zinc-400 hover:text-white transition-colors relative group" whileHover={{ y: -2 }}>
                   {item}
@@ -208,7 +208,7 @@ export default function Home() {
                 <Button onClick={() => scrollToSection("contact")} className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-medium px-6">Get Quote</Button>
               </motion.div>
             </div>
-            <motion.button className="md:hidden text-white p-2" onClick={() => setIsMenuOpen(!isMenuOpen)} whileTap={{ scale: 0.9 }}>
+            <motion.button className="md:hidden text-white p-2 absolute right-4" onClick={() => setIsMenuOpen(!isMenuOpen)} whileTap={{ scale: 0.9 }}>
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </motion.button>
           </div>
