@@ -105,7 +105,7 @@ const pricingPackages = [
   {
     name: "Complete Package",
     description: "The ultimate full-service detail",
-    features: ["Interior Package", "Exterior Package", "FREE Engine Bay Detail", "Paint Sealant Included", "Full Protection"],
+    features: ["Interior Package", "Exterior Package", "Paint Sealant Included", "Full Protection"],
     note: "Best Value - Save $40+",
     prices: [
       { vehicle: "Car", price: 280 },
