@@ -408,37 +408,15 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* Grid of All Transformations */}
-          <div className="grid md:grid-cols-2 gap-6">
-            {galleryImages.map((image, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
-                onClick={() => setSelectedImage(image)}
-              >
-                <div className="absolute inset-0 flex">
-                  <div className="w-1/2 relative">
-                    <img src={image.before} alt="Before" className="w-full h-full object-cover grayscale" />
-                    <span className="absolute top-3 left-3 bg-red-500/90 text-white text-xs px-2 py-1 rounded">BEFORE</span>
-                  </div>
-                  <div className="w-1/2 relative">
-                    <img src={image.after} alt="After" className="w-full h-full object-cover" />
-                    <span className="absolute top-3 right-3 bg-emerald-500/90 text-white text-xs px-2 py-1 rounded">AFTER</span>
-                  </div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h4 className="text-white font-semibold">{image.title}</h4>
-                    <p className="text-zinc-300 text-sm">{image.description}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {/* Upload your actual photos here - Ready for your images */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mt-12 text-center"
+          >
+            <p className="text-zinc-500 text-sm">📸 More photos coming soon - Upload your actual work photos below</p>
+          </motion.div>
         </div>
       </section>
 
