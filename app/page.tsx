@@ -104,30 +104,21 @@ const pricingPackages = [
   },
 ];
 
-const galleryImages = [
+const showcaseImages = [
   { 
-    before: "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800&q=80", 
-    after: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
-    title: "Ceramic Coating Transformation",
-    description: "5-year protection with mirror-like finish"
+    src: "/images/showcase-1.webp",
+    title: "Premium Window Tinting",
+    description: "Ceramic tint installation on Cadillac CT4-V"
   },
   { 
-    before: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80", 
-    after: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80",
-    title: "Interior Deep Clean",
-    description: "Leather restoration & stain removal"
+    src: "/images/showcase-2.webp",
+    title: "Professional Detailing",
+    description: "Complete exterior detail with showroom shine"
   },
   { 
-    before: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80", 
-    after: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80",
-    title: "Full Detail Package",
-    description: "Complete interior & exterior restoration"
-  },
-  { 
-    before: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80", 
-    after: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
-    title: "Window Tinting",
-    description: "Premium ceramic tint installation"
+    src: "/images/showcase-3.webp",
+    title: "Interior Restoration",
+    description: "Leather treatment and deep cleaning"
   },
 ];
 
@@ -211,8 +202,16 @@ export default function Home() {
 
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <motion.div style={{ y: heroY, opacity: heroOpacity }} className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#111] to-[#0a0a0a]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent" />
+          {/* Hero Background Image - Nissan Skyline */}
+          <div className="absolute inset-0">
+            <img 
+              src="/images/hero-skyline.webp" 
+              alt="Auto Spa 1 - Nissan Skyline R34" 
+              className="w-full h-full object-cover opacity-40"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0a0a0a]/70 to-[#0a0a0a]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/30 via-transparent to-transparent" />
+          </div>
           <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px]" />
           <motion.div animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px]" />
         </motion.div>
@@ -290,60 +289,60 @@ export default function Home() {
         </div>
       </section>
 
-      {/* NEW: Gallery Section with Before/After */}
+      {/* Showcase Gallery - Our Work */}
       <section id="gallery" className="py-32 bg-[#0d0d0d] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="text-center mb-16">
             <motion.div variants={fadeInUp}><Badge className="mb-6 bg-purple-500/10 text-purple-400 border-purple-500/20 px-4 py-2"><Camera className="w-4 h-4 mr-2" />Our Work</Badge></motion.div>
-            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Before & After Gallery</motion.h2>
-            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">See the Auto Spa 1 difference. Real transformations, real results.</motion.p>
+            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Showcase</motion.h2>
+            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">Real vehicles, real results. See the Auto Spa 1 difference.</motion.p>
           </motion.div>
 
-          {/* Main Gallery Carousel */}
+          {/* Showcase Carousel */}
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative mb-12">
-            <div className="relative aspect-video max-w-4xl mx-auto rounded-2xl overflow-hidden bg-zinc-900">
+            <div className="relative aspect-video max-w-5xl mx-auto rounded-2xl overflow-hidden bg-zinc-900 shadow-2xl shadow-purple-500/10">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentGalleryIndex}
-                  initial={{ opacity: 0, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -100 }}
-                  transition={{ duration: 0.5 }}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.6 }}
                   className="absolute inset-0"
                 >
-                  {/* Before/After Comparison */}
-                  <div className="relative w-full h-full group cursor-pointer" onClick={() => setSelectedImage(galleryImages[currentGalleryIndex])}>
-                    <div className="absolute inset-0 flex">
-                      {/* Before Image */}
-                      <div className="w-1/2 relative overflow-hidden">
-                        <img 
-                          src={galleryImages[currentGalleryIndex].before} 
-                          alt="Before" 
-                          className="w-full h-full object-cover grayscale"
-                        />
-                        <div className="absolute top-4 left-4 bg-red-500/90 text-white px-3 py-1 rounded-full text-sm font-semibold">BEFORE</div>
-                      </div>
-                      {/* After Image */}
-                      <div className="w-1/2 relative overflow-hidden">
-                        <img 
-                          src={galleryImages[currentGalleryIndex].after} 
-                          alt="After" 
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute top-4 right-4 bg-emerald-500/90 text-white px-3 py-1 rounded-full text-sm font-semibold">AFTER</div>
-                      </div>
-                    </div>
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                  <div className="relative w-full h-full group">
+                    <img 
+                      src={showcaseImages[currentGalleryIndex].src} 
+                      alt={showcaseImages[currentGalleryIndex].title}
+                      className="w-full h-full object-cover"
+                    />
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    
+                    {/* Info Overlay */}
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="absolute bottom-0 left-0 right-0 p-8"
+                    >
+                      <h3 className="text-3xl font-bold text-white mb-2">{showcaseImages[currentGalleryIndex].title}</h3>
+                      <p className="text-zinc-300 text-lg">{showcaseImages[currentGalleryIndex].description}</p>
+                    </motion.div>
+
+                    {/* Zoom Icon on Hover */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <motion.div 
-                        initial={{ scale: 0 }} 
-                        whileHover={{ scale: 1 }}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        whileHover={{ scale: 1.1 }}
+                        className="bg-white/20 backdrop-blur-md p-4 rounded-full cursor-pointer"
+                        onClick={() => setSelectedImage({
+                          before: showcaseImages[currentGalleryIndex].src,
+                          after: showcaseImages[currentGalleryIndex].src,
+                          title: showcaseImages[currentGalleryIndex].title
+                        })}
                       >
-                        <div className="bg-white/20 backdrop-blur-sm p-4 rounded-full">
-                          <ZoomIn className="w-8 h-8 text-white" />
-                        </div>
+                        <ZoomIn className="w-8 h-8 text-white" />
                       </motion.div>
                     </div>
                   </div>
@@ -352,13 +351,13 @@ export default function Home() {
               
               {/* Navigation Arrows */}
               <button 
-                onClick={() => setCurrentGalleryIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length)}
+                onClick={() => setCurrentGalleryIndex((prev) => (prev - 1 + showcaseImages.length) % showcaseImages.length)}
                 className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button 
-                onClick={() => setCurrentGalleryIndex((prev) => (prev + 1) % galleryImages.length)}
+                onClick={() => setCurrentGalleryIndex((prev) => (prev + 1) % showcaseImages.length)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all"
               >
                 <ChevronRight className="w-6 h-6" />
@@ -367,55 +366,26 @@ export default function Home() {
               {/* Play/Pause */}
               <button 
                 onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-                className="absolute bottom-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full backdrop-blur-sm transition-all"
+                className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full backdrop-blur-sm transition-all"
               >
                 {isAutoPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
               </button>
             </div>
 
-            {/* Gallery Info */}
-            <div className="text-center mt-6">
-              <motion.h3 
-                key={currentGalleryIndex}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-2xl font-bold text-white mb-2"
-              >
-                {galleryImages[currentGalleryIndex].title}
-              </motion.h3>
-              <motion.p 
-                key={`desc-${currentGalleryIndex}`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-zinc-400"
-              >
-                {galleryImages[currentGalleryIndex].description}
-              </motion.p>
-            </div>
-
             {/* Thumbnail Navigation */}
             <div className="flex justify-center gap-3 mt-8">
-              {galleryImages.map((_, index) => (
+              {showcaseImages.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentGalleryIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentGalleryIndex ? 'bg-blue-500 w-8' : 'bg-white/30 hover:bg-white/50'
+                  className={`relative w-20 h-14 rounded-lg overflow-hidden transition-all duration-300 ${
+                    index === currentGalleryIndex ? 'ring-2 ring-purple-500 scale-110' : 'opacity-50 hover:opacity-80'
                   }`}
-                />
+                >
+                  <img src={image.src} alt={image.title} className="w-full h-full object-cover" />
+                </button>
               ))}
             </div>
-          </motion.div>
-
-          {/* Upload your actual photos here - Ready for your images */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="mt-12 text-center"
-          >
-            <p className="text-zinc-500 text-sm">📸 More photos coming soon - Upload your actual work photos below</p>
           </motion.div>
         </div>
       </section>
@@ -654,16 +624,7 @@ export default function Home() {
             >
               <h3 className="text-2xl font-bold text-white text-center mb-6">{selectedImage.title}</h3>
               <div className="relative aspect-video rounded-2xl overflow-hidden">
-                <div className="absolute inset-0 flex">
-                  <div className="w-1/2 relative">
-                    <img src={selectedImage.before} alt="Before" className="w-full h-full object-cover grayscale" />
-                    <span className="absolute top-4 left-4 bg-red-500 text-white px-4 py-2 rounded-full font-semibold">BEFORE</span>
-                  </div>
-                  <div className="w-1/2 relative">
-                    <img src={selectedImage.after} alt="After" className="w-full h-full object-cover" />
-                    <span className="absolute top-4 right-4 bg-emerald-500 text-white px-4 py-2 rounded-full font-semibold">AFTER</span>
-                  </div>
-                </div>
+                <img src={selectedImage.before} alt={selectedImage.title} className="w-full h-full object-cover" />
               </div>
             </motion.div>
           </motion.div>
