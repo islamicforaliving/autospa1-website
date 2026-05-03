@@ -207,15 +207,16 @@ export default function Home() {
             <img 
               src="/images/hero-skyline.webp" 
               alt="Auto Spa 1 - Nissan Skyline R34" 
-              className="w-full h-full object-cover opacity-40"
+              className="w-full h-full object-cover opacity-70 scale-110"
+              style={{ objectPosition: 'center 30%' }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0a0a0a]/70 to-[#0a0a0a]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/30 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/60 via-[#0a0a0a]/40 to-[#0a0a0a]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent" />
           </div>
           <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px]" />
           <motion.div animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px]" />
         </motion.div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px]" />
+
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="text-center">
             <motion.div variants={fadeInUp}>
@@ -245,47 +246,6 @@ export default function Home() {
               ))}
             </motion.div>
           </motion.div>
-        </div>
-      </section>
-
-      <section id="services" className="py-32 bg-[#0a0a0a] relative">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="text-center mb-20">
-            <motion.div variants={fadeInUp}><Badge className="mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20 px-4 py-2">Premium Services</Badge></motion.div>
-            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Our Services</motion.h2>
-            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">From window tinting to full detailing packages, we provide premium automotive services tailored to your needs.</motion.p>
-          </motion.div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, index) => (
-              <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1, duration: 0.6 }}>
-                <Card className="group bg-gradient-to-br from-white/5 to-white/[0.02] border-white/10 hover:border-white/20 transition-all duration-500 h-full overflow-hidden">
-                  <CardContent className="p-8 relative">
-                    <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-500/30 transition-all duration-500" />
-                    <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                      <service.icon className="w-8 h-8 text-blue-400" />
-                    </div>
-                    <h3 className="text-2xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors">{service.title}</h3>
-                    <p className="text-zinc-400 mb-6 leading-relaxed">{service.description}</p>
-                    <ul className="space-y-2 mb-6">
-                      {service.features.map((feature, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm text-zinc-500">
-                          <CheckCircle className="w-4 h-4 text-emerald-400" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-white">{service.price}</span>
-                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                        <Button variant="outline" size="sm" onClick={() => scrollToSection("contact")} className="border-white/20 text-white hover:bg-white/10">Book Now</Button>
-                      </motion.div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -594,6 +554,47 @@ export default function Home() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.5 }} className="text-center mt-8">
             <p className="text-zinc-500 text-sm">* Additional charges may apply for excessive dirt, pet hair, or biohazard cleanup. Black & white vehicles add $20 for Exterior Package.</p>
           </motion.div>
+        </div>
+      </section>
+
+      <section id="services" className="py-32 bg-[#0a0a0a] relative">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="text-center mb-20">
+            <motion.div variants={fadeInUp}><Badge className="mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20 px-4 py-2">Premium Services</Badge></motion.div>
+            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Our Services</motion.h2>
+            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">From window tinting to full detailing packages, we provide premium automotive services tailored to your needs.</motion.p>
+          </motion.div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((service, index) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1, duration: 0.6 }}>
+                <Card className="group bg-gradient-to-br from-white/5 to-white/[0.02] border-white/10 hover:border-white/20 transition-all duration-500 h-full overflow-hidden">
+                  <CardContent className="p-8 relative">
+                    <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-500/30 transition-all duration-500" />
+                    <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                      <service.icon className="w-8 h-8 text-blue-400" />
+                    </div>
+                    <h3 className="text-2xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors">{service.title}</h3>
+                    <p className="text-zinc-400 mb-6 leading-relaxed">{service.description}</p>
+                    <ul className="space-y-2 mb-6">
+                      {service.features.map((feature, i) => (
+                        <li key={i} className="flex items-center gap-2 text-sm text-zinc-500">
+                          <CheckCircle className="w-4 h-4 text-emerald-400" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex items-center justify-between">
+                      <span className="text-3xl font-bold text-white">{service.price}</span>
+                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                        <Button variant="outline" size="sm" onClick={() => scrollToSection("contact")} className="border-white/20 text-white hover:bg-white/10">Book Now</Button>
+                      </motion.div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
