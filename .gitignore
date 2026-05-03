@@ -4,7 +4,7 @@ node_modules
 .pnp.js
 
 # Build outputs
-dist
+# dist (temporarily commented for password protection files)
 build
 .next
 out
