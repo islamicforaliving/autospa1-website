@@ -149,7 +149,7 @@ export default function Home() {
   useEffect(() => {
     if (!isAutoPlaying) return;
     const interval = setInterval(() => {
-      setCurrentGalleryIndex((prev) => (prev + 1) % galleryImages.length);
+      setCurrentGalleryIndex((prev) => (prev + 1) % showcaseImages.length);
     }, 4000);
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
