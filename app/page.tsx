@@ -11,17 +11,32 @@ import {
   ChevronLeft, Play, Pause, ZoomIn, XCircle, Camera, Zap, Heart
 } from "lucide-react";
 
-const fadeInUp = { hidden: { opacity: 0, y: 60 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } } };
-const staggerContainer = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } as const } };
-const scaleIn = { hidden: { opacity: 0, scale: 0.8 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const } } };
+// Simplified animations for mobile performance
+const fadeInUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } };
+const staggerContainer = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.08 } } };
+const scaleIn = { hidden: { opacity: 0, scale: 0.95 }, visible: { opacity: 1, scale: 1, transition: { duration: 0.4 } } };
+
+// Detect mobile for conditional animations
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  return isMobile;
+};
 
 function AnimatedCounter({ value, suffix = "" }: { value: number; suffix?: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+  const isMobile = useIsMobile();
+  
   useEffect(() => {
-    if (isInView) {
-      const duration = 2000, steps = 60, increment = value / steps;
+    if (isInView && !isMobile) {
+      const duration = 1500, steps = 30, increment = value / steps;
       let current = 0;
       const timer = setInterval(() => {
         current += increment;
@@ -29,8 +44,10 @@ function AnimatedCounter({ value, suffix = "" }: { value: number; suffix?: strin
         else setCount(Math.floor(current));
       }, duration / steps);
       return () => clearInterval(timer);
+    } else if (isInView && isMobile) {
+      setCount(value);
     }
-  }, [isInView, value]);
+  }, [isInView, value, isMobile]);
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
@@ -134,11 +151,10 @@ export default function Home() {
     "Interior Package": "Car", 
     "Complete Package": "Car"
   });
-  const [hoveredPackage, setHoveredPackage] = useState<string | null>(null);
   const [currentGalleryIndex, setCurrentGalleryIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [selectedImage, setSelectedImage] = useState<{before: string, after: string, title: string} | null>(null);
-  const [showBeforeAfter, setShowBeforeAfter] = useState<{[key: number]: boolean}>({});
+  const isMobile = useIsMobile();
   
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
@@ -150,14 +166,13 @@ export default function Home() {
     if (element) { element.scrollIntoView({ behavior: "smooth" }); setIsMenuOpen(false); }
   };
 
-  // Auto-play gallery
   useEffect(() => {
     if (!isAutoPlaying) return;
     const interval = setInterval(() => {
       setCurrentGalleryIndex((prev) => (prev + 1) % showcaseImages.length);
-    }, 4000);
+    }, isMobile ? 5000 : 4000);
     return () => clearInterval(interval);
-  }, [isAutoPlaying]);
+  }, [isAutoPlaying, isMobile]);
 
   const getPrice = (pkg: typeof pricingPackages[0], vehicleType: string) => {
     const price = pkg.prices.find(p => p.vehicle === vehicleType)?.price || pkg.prices[0].price;
@@ -170,10 +185,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <motion.a href="#" className="flex items-center gap-3" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                <Car className="w-7 h-7 text-white" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                <Car className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
               </div>
-              <span className="text-xl font-bold text-white tracking-tight">AUTO SPA <span className="text-blue-400">1</span></span>
+              <span className="text-lg sm:text-xl font-bold text-white tracking-tight">AUTO SPA <span className="text-blue-400">1</span></span>
             </motion.a>
             <div className="hidden md:flex items-center gap-8">
               {["Services", "Gallery", "Pricing", "Reviews", "Contact"].map((item) => (
@@ -206,8 +221,7 @@ export default function Home() {
       </motion.nav>
 
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="absolute inset-0">
-          {/* Hero Background Image - Stock Car Image */}
+        <motion.div style={{ y: isMobile ? 0 : heroY, opacity: isMobile ? 1 : heroOpacity }} className="absolute inset-0">
           <div className="absolute inset-0">
             <img 
               src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=85" 
@@ -217,41 +231,46 @@ export default function Home() {
             />
             <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/70 via-[#0a0a0a]/50 to-[#0a0a0a]/90" />
           </div>
-          <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px]" />
-          <motion.div animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px]" />
+          {!isMobile && (
+            <>
+              <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px]" />
+              <motion.div animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px]" />
+            </>
+          )}
         </motion.div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-12 sm:pb-20">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="text-center">
-            {/* Text Container with Background Shadow */}
             <motion.div 
               variants={fadeInUp}
-              className="inline-block bg-black/40 backdrop-blur-md rounded-3xl px-8 py-10 border border-white/10 shadow-2xl shadow-black/50"
+              className="inline-block bg-black/50 backdrop-blur-md rounded-2xl sm:rounded-3xl px-4 sm:px-8 py-6 sm:py-10 border border-white/10 shadow-2xl shadow-black/50"
             >
-              <motion.div className="mb-6">
-                <Badge className="bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-sm px-4 py-2">
-                  <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-400" />#1 Rated Auto Detailing in Westland
+              <motion.div className="mb-4 sm:mb-6">
+                <Badge className="bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm">
+                  <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 fill-yellow-400 text-yellow-400" />#1 Rated Auto Detailing in Westland
                 </Badge>
               </motion.div>
-              <motion.h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold text-white tracking-tight mb-6 drop-shadow-2xl">
+              <motion.h1 className="text-3xl sm:text-5xl lg:text-8xl font-bold text-white tracking-tight mb-4 sm:mb-6 drop-shadow-2xl">
                 <span className="block drop-shadow-lg">Transform Your</span>
-                <motion.span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg" animate={{ backgroundPosition: ["0%", "100%", "0%"] }} transition={{ duration: 5, repeat: Infinity }}>Vehicle Today</motion.span>
+                <motion.span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">Vehicle Today</motion.span>
               </motion.h1>
-              <motion.p className="text-xl text-zinc-200 max-w-2xl mx-auto drop-shadow-lg">Premium window tinting, ceramic coating, and auto detailing in Westland, MI. Experience the Auto Spa 1 difference.</motion.p>
+              <motion.p className="text-base sm:text-xl text-zinc-200 max-w-2xl mx-auto drop-shadow-lg px-2 sm:px-0">Premium window tinting, ceramic coating, and auto detailing in Westland, MI.</motion.p>
             </motion.div>
-            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center mb-20">
+            
+            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mt-8 sm:mt-12 px-4 sm:px-0">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" onClick={() => scrollToSection("contact")} className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-semibold px-10 py-7 text-lg rounded-full">Get Free Quote<ArrowRight className="ml-2 w-5 h-5" /></Button>
+                <Button size="lg" onClick={() => scrollToSection("contact")} className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-semibold px-6 sm:px-10 py-5 sm:py-7 text-base sm:text-lg rounded-full w-full sm:w-auto">Get Free Quote<ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" /></Button>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" variant="outline" onClick={() => scrollToSection("gallery")} className="border-white/20 text-white hover:bg-white/10 font-semibold px-10 py-7 text-lg rounded-full">View Our Work</Button>
+                <Button size="lg" variant="outline" onClick={() => scrollToSection("gallery")} className="border-white/20 text-white hover:bg-white/10 font-semibold px-6 sm:px-10 py-5 sm:py-7 text-base sm:text-lg rounded-full w-full sm:w-auto">View Our Work</Button>
               </motion.div>
             </motion.div>
-            <motion.div variants={staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+            
+            <motion.div variants={staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-8 max-w-4xl mx-auto mt-10 sm:mt-16 px-4 sm:px-0">
               {[{ value: 157, suffix: "+", label: "5-Star Reviews" }, { value: 500, suffix: "+", label: "Vehicles Detailed" }, { value: 5, suffix: ".0", label: "Star Rating" }, { value: 6, suffix: "+", label: "Years Experience" }].map((stat, index) => (
-                <motion.div key={index} variants={scaleIn} className="text-center p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10" whileHover={{ y: -5, borderColor: "rgba(255,255,255,0.2)" }}>
-                  <div className="text-4xl sm:text-5xl font-bold text-white mb-2"><AnimatedCounter value={stat.value} suffix={stat.suffix} /></div>
-                  <div className="text-sm text-zinc-400">{stat.label}</div>
+                <motion.div key={index} variants={scaleIn} className="text-center p-3 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10" whileHover={!isMobile ? { y: -5, borderColor: "rgba(255,255,255,0.2)" } : {}}>
+                  <div className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-1 sm:mb-2"><AnimatedCounter value={stat.value} suffix={stat.suffix} /></div>
+                  <div className="text-xs sm:text-sm text-zinc-400">{stat.label}</div>
                 </motion.div>
               ))}
             </motion.div>
@@ -259,26 +278,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Showcase Gallery - Our Work */}
-      <section id="gallery" className="py-32 bg-[#0d0d0d] relative overflow-hidden">
+      <section id="gallery" className="py-16 sm:py-32 bg-[#0d0d0d] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="text-center mb-16">
-            <motion.div variants={fadeInUp}><Badge className="mb-6 bg-purple-500/10 text-purple-400 border-purple-500/20 px-4 py-2"><Camera className="w-4 h-4 mr-2" />Our Work</Badge></motion.div>
-            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Showcase</motion.h2>
-            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">Real vehicles, real results. See the Auto Spa 1 difference.</motion.p>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="text-center mb-10 sm:mb-16">
+            <motion.div variants={fadeInUp}><Badge className="mb-4 sm:mb-6 bg-purple-500/10 text-purple-400 border-purple-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm"><Camera className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />Our Work</Badge></motion.div>
+            <motion.h2 variants={fadeInUp} className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">Showcase</motion.h2>
+            <motion.p variants={fadeInUp} className="text-base sm:text-xl text-zinc-400 max-w-2xl mx-auto px-4 sm:px-0">Real vehicles, real results. See the Auto Spa 1 difference.</motion.p>
           </motion.div>
 
-          {/* Showcase Carousel */}
-          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative mb-12">
-            <div className="relative aspect-video max-w-5xl mx-auto rounded-2xl overflow-hidden bg-zinc-900 shadow-2xl shadow-purple-500/10">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative mb-8 sm:mb-12">
+            <div className="relative aspect-[4/3] sm:aspect-video max-w-5xl mx-auto rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 shadow-xl sm:shadow-2xl shadow-purple-500/10">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentGalleryIndex}
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.6 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4 }}
                   className="absolute inset-0"
                 >
                   <div className="relative w-full h-full group">
@@ -286,73 +303,67 @@ export default function Home() {
                       src={showcaseImages[currentGalleryIndex].src} 
                       alt={showcaseImages[currentGalleryIndex].title}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
-                    {/* Gradient Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                    
-                    {/* Info Overlay */}
                     <motion.div 
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 }}
-                      className="absolute bottom-0 left-0 right-0 p-8"
+                      transition={{ delay: 0.2 }}
+                      className="absolute bottom-0 left-0 right-0 p-4 sm:p-8"
                     >
-                      <h3 className="text-3xl font-bold text-white mb-2">{showcaseImages[currentGalleryIndex].title}</h3>
-                      <p className="text-zinc-300 text-lg">{showcaseImages[currentGalleryIndex].description}</p>
+                      <h3 className="text-xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">{showcaseImages[currentGalleryIndex].title}</h3>
+                      <p className="text-zinc-300 text-sm sm:text-lg">{showcaseImages[currentGalleryIndex].description}</p>
                     </motion.div>
-
-                    {/* Zoom Icon on Hover */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <motion.div 
-                        whileHover={{ scale: 1.1 }}
-                        className="bg-white/20 backdrop-blur-md p-4 rounded-full cursor-pointer"
-                        onClick={() => setSelectedImage({
-                          before: showcaseImages[currentGalleryIndex].src,
-                          after: showcaseImages[currentGalleryIndex].src,
-                          title: showcaseImages[currentGalleryIndex].title
-                        })}
-                      >
-                        <ZoomIn className="w-8 h-8 text-white" />
-                      </motion.div>
-                    </div>
+                    {!isMobile && (
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <motion.div 
+                          whileHover={{ scale: 1.1 }}
+                          className="bg-white/20 backdrop-blur-md p-3 sm:p-4 rounded-full cursor-pointer"
+                          onClick={() => setSelectedImage({
+                            before: showcaseImages[currentGalleryIndex].src,
+                            after: showcaseImages[currentGalleryIndex].src,
+                            title: showcaseImages[currentGalleryIndex].title
+                          })}
+                        >
+                          <ZoomIn className="w-5 h-5 sm:w-8 sm:h-8 text-white" />
+                        </motion.div>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               </AnimatePresence>
               
-              {/* Navigation Arrows */}
               <button 
                 onClick={() => setCurrentGalleryIndex((prev) => (prev - 1 + showcaseImages.length) % showcaseImages.length)}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 sm:p-3 rounded-full backdrop-blur-sm transition-all"
               >
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
               <button 
                 onClick={() => setCurrentGalleryIndex((prev) => (prev + 1) % showcaseImages.length)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 sm:p-3 rounded-full backdrop-blur-sm transition-all"
               >
-                <ChevronRight className="w-6 h-6" />
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
-
-              {/* Play/Pause */}
               <button 
                 onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-                className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full backdrop-blur-sm transition-all"
+                className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-black/50 hover:bg-black/70 text-white p-1.5 sm:p-2 rounded-full backdrop-blur-sm transition-all"
               >
-                {isAutoPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+                {isAutoPlaying ? <Pause className="w-4 h-4 sm:w-5 sm:h-5" /> : <Play className="w-4 h-4 sm:w-5 sm:h-5" />}
               </button>
             </div>
 
-            {/* Thumbnail Navigation */}
-            <div className="flex justify-center gap-3 mt-8">
+            <div className="flex justify-center gap-2 sm:gap-3 mt-4 sm:mt-8 px-4">
               {showcaseImages.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentGalleryIndex(index)}
-                  className={`relative w-20 h-14 rounded-lg overflow-hidden transition-all duration-300 ${
-                    index === currentGalleryIndex ? 'ring-2 ring-purple-500 scale-110' : 'opacity-50 hover:opacity-80'
+                  className={`relative w-14 h-10 sm:w-20 sm:h-14 rounded-lg overflow-hidden transition-all duration-300 ${
+                    index === currentGalleryIndex ? 'ring-2 ring-purple-500 scale-105' : 'opacity-50 hover:opacity-80'
                   }`}
                 >
-                  <img src={image.src} alt={image.title} className="w-full h-full object-cover" />
+                  <img src={image.src} alt={image.title} className="w-full h-full object-cover" loading="lazy" />
                 </button>
               ))}
             </div>
@@ -360,102 +371,55 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Enhanced Pricing Section */}
-      <section id="pricing" className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+      <section id="pricing" className="py-16 sm:py-32 bg-[#0a0a0a] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-900/10 via-transparent to-transparent" />
-        
-        {/* Animated Background Elements */}
-        <motion.div 
-          animate={{ rotate: 360, scale: [1, 1.1, 1] }} 
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/5 rounded-full blur-[100px]" 
-        />
-        <motion.div 
-          animate={{ rotate: -360, scale: [1, 1.2, 1] }} 
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-20 -right-40 w-96 h-96 bg-purple-500/5 rounded-full blur-[100px]" 
-        />
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="text-center mb-16">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="text-center mb-10 sm:mb-16">
             <motion.div variants={fadeInUp}>
-              <Badge className="mb-6 bg-amber-500/10 text-amber-400 border-amber-500/20 px-4 py-2">
-                <Zap className="w-4 h-4 mr-2" />Transparent Pricing
+              <Badge className="mb-4 sm:mb-6 bg-amber-500/10 text-amber-400 border-amber-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm">
+                <Zap className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />Transparent Pricing
               </Badge>
             </motion.div>
-            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Detailing Packages</motion.h2>
-            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">Professional detailing tailored to your vehicle type. All packages include our satisfaction guarantee.</motion.p>
+            <motion.h2 variants={fadeInUp} className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">Detailing Packages</motion.h2>
+            <motion.p variants={fadeInUp} className="text-base sm:text-xl text-zinc-400 max-w-2xl mx-auto px-4 sm:px-0">Professional detailing tailored to your vehicle type. All packages include our satisfaction guarantee.</motion.p>
           </motion.div>
 
-          {/* Interactive Pricing Cards */}
-          <div className="grid lg:grid-cols-3 gap-8 mb-12">
+          <div className="grid lg:grid-cols-3 gap-4 sm:gap-8 mb-8 sm:mb-12">
             {pricingPackages.map((pkg, index) => (
               <motion.div 
                 key={index} 
-                initial={{ opacity: 0, y: 60, rotateX: -15 }}
-                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.2, duration: 0.7, type: "spring" }}
-                whileHover={{ y: -10, scale: 1.02 }}
-                onHoverStart={() => setHoveredPackage(pkg.name)}
-                onHoverEnd={() => setHoveredPackage(null)}
-                className="perspective-1000"
+                transition={{ delay: index * 0.1, duration: 0.5 }}
               >
-                <Card className={`h-full relative overflow-hidden ${pkg.popular ? 'border-amber-500/50 shadow-2xl shadow-amber-500/10' : 'border-white/10'} bg-zinc-900/50 backdrop-blur-sm transition-all duration-500`}>
-                  {/* Popular Badge */}
+                <Card className={`h-full relative overflow-hidden ${pkg.popular ? 'border-amber-500/50 shadow-xl shadow-amber-500/10' : 'border-white/10'} bg-zinc-900/50 backdrop-blur-sm`}>
                   {pkg.popular && (
-                    <motion.div 
-                      initial={{ x: 100, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.5, type: "spring" }}
-                      className="absolute top-0 right-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-bl-lg z-10"
-                    >
+                    <div className="absolute top-0 right-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1 sm:px-4 sm:py-1.5 rounded-bl-lg z-10">
                       <Star className="w-3 h-3 inline mr-1 fill-white" /> BEST VALUE
-                    </motion.div>
+                    </div>
                   )}
-
-                  {/* Card Image */}
-                  <div className="relative h-48 overflow-hidden">
-                    <motion.img 
-                      src={pkg.image} 
-                      alt={pkg.name}
-                      className="w-full h-full object-cover"
-                      animate={{ scale: hoveredPackage === pkg.name ? 1.1 : 1 }}
-                      transition={{ duration: 0.4 }}
-                    />
-                    <div className={`absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent`} />
+                  <div className="relative h-36 sm:h-48 overflow-hidden">
+                    <img src={pkg.image} alt={pkg.name} className="w-full h-full object-cover" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
                     <div className={`absolute inset-0 bg-gradient-to-br ${pkg.color} opacity-20`} />
                   </div>
-
-                  <CardContent className="p-6 relative">
-                    {/* Package Name & Description */}
-                    <h3 className="text-2xl font-bold text-white mb-2">{pkg.name}</h3>
-                    <p className="text-zinc-400 text-sm mb-4">{pkg.description}</p>
-
-                    {/* Animated Price Display */}
-                    <div className="mb-6">
-                      <motion.div 
-                        key={selectedVehicle[pkg.name]}
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        className="text-5xl font-bold text-white"
-                      >
-                        <span className="text-2xl text-zinc-500">$</span>
-                        {getPrice(pkg, selectedVehicle[pkg.name])}
+                  <CardContent className="p-4 sm:p-6 relative">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">{pkg.name}</h3>
+                    <p className="text-zinc-400 text-xs sm:text-sm mb-3 sm:mb-4">{pkg.description}</p>
+                    <div className="mb-4 sm:mb-6">
+                      <motion.div key={selectedVehicle[pkg.name]} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-3xl sm:text-5xl font-bold text-white">
+                        <span className="text-lg sm:text-2xl text-zinc-500">$</span>{getPrice(pkg, selectedVehicle[pkg.name])}
                       </motion.div>
-                      <p className="text-zinc-500 text-sm mt-1">Starting price</p>
+                      <p className="text-zinc-500 text-xs sm:text-sm mt-1">Starting price</p>
                     </div>
-
-                    {/* Interactive Vehicle Selector */}
-                    <div className="mb-6">
+                    <div className="mb-4 sm:mb-6">
                       <p className="text-zinc-400 text-xs mb-2 uppercase tracking-wider">Select your vehicle</p>
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                         {["Car", "Pick Up", "Small SUV", "SUV & Minivan", "Large SUV", "Conversion Van"].map((vehicle) => (
-                          <motion.button
+                          <button
                             key={vehicle}
                             onClick={() => setSelectedVehicle({...selectedVehicle, [pkg.name]: vehicle})}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
                             className={`py-2 px-1 text-xs rounded-lg transition-all duration-300 ${
                               selectedVehicle[pkg.name] === vehicle 
                                 ? `bg-gradient-to-r ${pkg.color} text-white font-semibold shadow-lg` 
@@ -463,142 +427,67 @@ export default function Home() {
                             }`}
                           >
                             {vehicle}
-                          </motion.button>
+                          </button>
                         ))}
                       </div>
                     </div>
-
-                    {/* Features with Stagger Animation */}
-                    <div className="space-y-2 mb-6">
-                      {pkg.features.map((feature, i) => (
-                        <motion.div 
-                          key={i}
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: i * 0.05 }}
-                          className="flex items-center gap-3 text-zinc-300"
-                        >
-                          <motion.div
-                            whileHover={{ scale: 1.2, rotate: 360 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <CheckCircle className={`w-5 h-5 ${pkg.popular ? 'text-amber-400' : 'text-emerald-400'} flex-shrink-0`} />
-                          </motion.div>
-                          <span className="text-sm">{feature}</span>
-                        </motion.div>
+                    <div className="space-y-2 mb-4 sm:mb-6">
+                      {pkg.features.slice(0, isMobile ? 5 : 8).map((feature, i) => (
+                        <div key={i} className="flex items-center gap-3 text-zinc-300">
+                          <CheckCircle className={`w-4 h-4 sm:w-5 sm:h-5 ${pkg.popular ? 'text-amber-400' : 'text-emerald-400'} flex-shrink-0`} />
+                          <span className="text-xs sm:text-sm">{feature}</span>
+                        </div>
                       ))}
                     </div>
-
                     {pkg.note && (
-                      <motion.p 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-amber-400 text-xs mb-4 italic flex items-center gap-2"
-                      >
+                      <p className="text-amber-400 text-xs mb-3 sm:mb-4 italic flex items-center gap-2">
                         <Sparkles className="w-3 h-3" /> {pkg.note}
-                      </motion.p>
+                      </p>
                     )}
-
-                    {/* CTA Button with Glow Effect */}
-                    <motion.div 
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="relative"
-                    >
-                      {pkg.popular && (
-                        <motion.div
-                          animate={{ opacity: [0.5, 1, 0.5] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                          className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full blur opacity-30"
-                        />
-                      )}
-                      <Button 
-                        onClick={() => scrollToSection("contact")}
-                        className={`w-full py-6 rounded-full font-semibold relative overflow-hidden ${
-                          pkg.popular 
-                            ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:shadow-lg hover:shadow-amber-500/25' 
-                            : 'bg-white/10 text-white hover:bg-white/20'
-                        }`}
-                      >
-                        <motion.span
-                          initial={{ x: 0 }}
-                          whileHover={{ x: 5 }}
-                          className="flex items-center justify-center gap-2"
-                        >
-                          Book {pkg.name}
-                          <ArrowRight className="w-4 h-4" />
-                        </motion.span>
-                      </Button>
-                    </motion.div>
+                    <Button onClick={() => scrollToSection("contact")} className={`w-full py-5 sm:py-6 rounded-full font-semibold text-sm sm:text-base ${pkg.popular ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}>
+                      Book {pkg.name}
+                    </Button>
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
           </div>
 
-          {/* Trust Badges */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-6 mt-12"
-          >
-            {[
-              { icon: Shield, text: "Satisfaction Guaranteed" },
-              { icon: Clock, text: "Same-Day Service Available" },
-              { icon: Award, text: "Licensed & Insured" },
-              { icon: Heart, text: "500+ Happy Customers" },
-            ].map((badge, i) => (
-              <motion.div 
-                key={i}
-                whileHover={{ scale: 1.05, y: -2 }}
-                className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10"
-              >
-                <badge.icon className="w-4 h-4 text-blue-400" />
-                <span className="text-zinc-300 text-sm">{badge.text}</span>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.5 }} className="text-center mt-8">
-            <p className="text-zinc-500 text-sm">* Additional charges may apply for excessive dirt, pet hair, or biohazard cleanup. Black & white vehicles add $20 for Exterior Package.</p>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-6 sm:mt-8">
+            <p className="text-zinc-500 text-xs sm:text-sm">* Additional charges may apply for excessive dirt, pet hair, or biohazard cleanup.</p>
           </motion.div>
         </div>
       </section>
 
-      <section id="services" className="py-32 bg-[#0a0a0a] relative">
+      <section id="services" className="py-16 sm:py-32 bg-[#0a0a0a] relative">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="text-center mb-20">
-            <motion.div variants={fadeInUp}><Badge className="mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20 px-4 py-2">Premium Services</Badge></motion.div>
-            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Our Services</motion.h2>
-            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">From window tinting to full detailing packages, we provide premium automotive services tailored to your needs.</motion.p>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="text-center mb-10 sm:mb-20">
+            <motion.div variants={fadeInUp}><Badge className="mb-4 sm:mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm">Premium Services</Badge></motion.div>
+            <motion.h2 variants={fadeInUp} className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">Our Services</motion.h2>
+            <motion.p variants={fadeInUp} className="text-base sm:text-xl text-zinc-400 max-w-2xl mx-auto px-4 sm:px-0">From window tinting to full detailing packages, we provide premium automotive services.</motion.p>
           </motion.div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {services.map((service, index) => (
-              <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1, duration: 0.6 }}>
-                <Card className="group bg-gradient-to-br from-white/5 to-white/[0.02] border-white/10 hover:border-white/20 transition-all duration-500 h-full overflow-hidden">
-                  <CardContent className="p-8 relative">
-                    <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-500/30 transition-all duration-500" />
-                    <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                      <service.icon className="w-8 h-8 text-blue-400" />
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05, duration: 0.4 }}>
+                <Card className="group bg-gradient-to-br from-white/5 to-white/[0.02] border-white/10 hover:border-white/20 transition-all duration-300 h-full overflow-hidden">
+                  <CardContent className="p-5 sm:p-8 relative">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-blue-500/10 flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <service.icon className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400" />
                     </div>
-                    <h3 className="text-2xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors">{service.title}</h3>
-                    <p className="text-zinc-400 mb-6 leading-relaxed">{service.description}</p>
-                    <ul className="space-y-2 mb-6">
-                      {service.features.map((feature, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm text-zinc-500">
-                          <CheckCircle className="w-4 h-4 text-emerald-400" />
+                    <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 sm:mb-3 group-hover:text-blue-400 transition-colors">{service.title}</h3>
+                    <p className="text-zinc-400 text-sm sm:text-base mb-4 sm:mb-6 leading-relaxed">{service.description}</p>
+                    <ul className="space-y-2 mb-4 sm:mb-6">
+                      {service.features.slice(0, isMobile ? 3 : 4).map((feature, i) => (
+                        <li key={i} className="flex items-center gap-2 text-xs sm:text-sm text-zinc-500">
+                          <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" />
                           {feature}
                         </li>
                       ))}
                     </ul>
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-white">{service.price}</span>
-                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                        <Button variant="outline" size="sm" onClick={() => scrollToSection("contact")} className="border-white/20 text-white hover:bg-white/10">Book Now</Button>
-                      </motion.div>
+                      <span className="text-2xl sm:text-3xl font-bold text-white">{service.price}</span>
+                      <Button variant="outline" size="sm" onClick={() => scrollToSection("contact")} className="border-white/20 text-white hover:bg-white/10 text-xs sm:text-sm">Book Now</Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -607,6 +496,149 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <section id="reviews" className="py-16 sm:py-32 bg-[#0d0d0d] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="text-center mb-10 sm:mb-16">
+            <motion.div variants={fadeInUp}><Badge className="mb-4 sm:mb-6 bg-yellow-500/10 text-yellow-400 border-yellow-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm"><Star className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 fill-yellow-400" />Customer Reviews</Badge></motion.div>
+            <motion.h2 variants={fadeInUp} className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">What Our Customers Say</motion.h2>
+            <motion.p variants={fadeInUp} className="text-base sm:text-xl text-zinc-400 max-w-2xl mx-auto px-4 sm:px-0">Real reviews from real customers in Westland, MI.</motion.p>
+          </motion.div>
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+            {realReviews.map((review, index) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1, duration: 0.4 }}>
+                <Card className="bg-white/5 border-white/10 hover:border-white/20 transition-all duration-300 h-full">
+                  <CardContent className="p-5 sm:p-8">
+                    <Quote className="w-8 h-8 sm:w-10 sm:h-10 text-blue-500/30 mb-3 sm:mb-4" />
+                    <p className="text-zinc-300 text-sm sm:text-lg leading-relaxed mb-4 sm:mb-6">"{review.quote}"</p>
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm sm:text-base">{review.name[0]}</div>
+                      <div>
+                        <p className="text-white font-semibold text-sm sm:text-base">{review.name}</p>
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <div className="flex">
+                            {[...Array(review.rating)].map((_, i) => (
+                              <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 fill-yellow-400 text-yellow-400" />
+                            ))}
+                          </div>
+                          <span className="text-zinc-500 text-xs sm:text-sm">• {review.service}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="process" className="py-16 sm:py-32 bg-[#0a0a0a] relative">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="text-center mb-10 sm:mb-20">
+            <motion.div variants={fadeInUp}><Badge className="mb-4 sm:mb-6 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm">How It Works</Badge></motion.div>
+            <motion.h2 variants={fadeInUp} className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">Our Process</motion.h2>
+            <motion.p variants={fadeInUp} className="text-base sm:text-xl text-zinc-400 max-w-2xl mx-auto px-4 sm:px-0">Simple, transparent, and professional service from start to finish.</motion.p>
+          </motion.div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+            {[
+              { step: "01", title: "Book Online", description: "Schedule your appointment through our easy online booking system or give us a call." },
+              { step: "02", title: "Drop Off", description: "Bring your vehicle to our Westland location at 38505 Ford Rd." },
+              { step: "03", title: "We Work", description: "Our expert team meticulously details your vehicle using premium products." },
+              { step: "04", title: "Drive Happy", description: "Pick up your transformed vehicle and enjoy that new car feeling!" },
+            ].map((item, index) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1, duration: 0.4 }} className="text-center">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                  <span className="text-2xl sm:text-3xl font-bold text-blue-400">{item.step}</span>
+                </div>
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-3">{item.title}</h3>
+                <p className="text-zinc-400 text-xs sm:text-sm">{item.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" className="py-16 sm:py-32 bg-[#0d0d0d] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-16">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer}>
+              <motion.div variants={fadeInUp}><Badge className="mb-4 sm:mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm">Get In Touch</Badge></motion.div>
+              <motion.h2 variants={fadeInUp} className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">Ready to Transform Your Vehicle?</motion.h2>
+              <motion.p variants={fadeInUp} className="text-base sm:text-xl text-zinc-400 mb-8 sm:mb-12">Get a free quote or book your appointment today. Walk-ins welcome!</motion.p>
+              <motion.div variants={staggerContainer} className="space-y-4 sm:space-y-6">
+                {[
+                  { icon: MapPin, title: "Visit Us", content: "38505 Ford Rd, Westland, MI 48185" },
+                  { icon: Phone, title: "Call Us", content: "(734) 352-9000" },
+                  { icon: Clock, title: "Hours", content: "Mon-Sat: 9AM-6PM, Sun: Closed" },
+                ].map((item, index) => (
+                  <motion.div key={index} variants={fadeInUp} className="flex items-start gap-3 sm:gap-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white/5 flex items-center justify-center flex-shrink-0">
+                      <item.icon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold mb-0.5 sm:mb-1 text-sm sm:text-base">{item.title}</h4>
+                      <p className="text-zinc-400 text-xs sm:text-sm">{item.content}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-5 sm:p-8">
+                  <h3 className="text-xl sm:text-2xl font-semibold text-white mb-4 sm:mb-6">Send Us a Message</h3>
+                  <form className="space-y-4 sm:space-y-6" onSubmit={(e) => e.preventDefault()}>
+                    <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+                      <div><label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">Name</label><input type="text" className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-colors text-sm" placeholder="Your name" /></div>
+                      <div><label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">Phone</label><input type="tel" className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-colors text-sm" placeholder="Your phone" /></div>
+                    </div>
+                    <div><label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">Service</label><select className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500/50 transition-colors text-sm"><option value="" className="bg-[#141414]">Select a service</option><option value="tinting" className="bg-[#141414]">Window Tinting</option><option value="ceramic" className="bg-[#141414]">Ceramic Coating</option><option value="ppf" className="bg-[#141414]">Paint Protection Film</option><option value="detail" className="bg-[#141414]">Full Detail Package</option><option value="interior" className="bg-[#141414]">Interior Detailing</option><option value="windshield" className="bg-[#141414]">Windshield Repair</option></select></div>
+                    <div><label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">Message</label><textarea rows={4} className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-colors resize-none text-sm" placeholder="Tell us about your vehicle..." /></div>
+                    <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-semibold py-5 sm:py-6 rounded-full text-sm sm:text-base">Send Message</Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="bg-[#0a0a0a] border-t border-white/10 py-10 sm:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-12 mb-8 sm:mb-12">
+            <div className="col-span-2">
+              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center"><Car className="w-6 h-6 sm:w-7 sm:h-7 text-white" /></div>
+                <span className="text-xl sm:text-2xl font-bold text-white">AUTO SPA <span className="text-blue-400">1</span></span>
+              </div>
+              <p className="text-zinc-400 max-w-sm mb-4 sm:mb-6 text-sm sm:text-base">Premium window tinting and auto detailing services in Westland, MI. Transforming vehicles with expert care since 2019.</p>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Services</h4>
+              <ul className="space-y-2 sm:space-y-3">
+                {["Window Tinting", "Ceramic Coating", "Paint Protection", "Auto Detailing", "Windshield Repair"].map((service) => (
+                  <li key={service}><button onClick={() => scrollToSection("services")} className="text-zinc-400 hover:text-white transition-colors text-xs sm:text-sm">{service}</button></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Contact</h4>
+              <ul className="space-y-2 sm:space-y-3 text-zinc-400 text-xs sm:text-sm">
+                <li>38505 Ford Rd</li>
+                <li>Westland, MI 48185</li>
+                <li><a href="tel:734-352-9000" className="hover:text-white transition-colors">(734) 352-9000</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="pt-6 sm:pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4">
+            <p className="text-zinc-500 text-xs sm:text-sm">&copy; 2025 Auto Spa 1. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
 
       {/* Image Lightbox Modal */}
       <AnimatePresence>
@@ -621,169 +653,26 @@ export default function Home() {
             <motion.button
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="absolute top-6 right-6 text-white/70 hover:text-white z-10"
+              className="absolute top-4 sm:top-6 right-4 sm:right-6 text-white/70 hover:text-white z-10"
               onClick={() => setSelectedImage(null)}
             >
-              <XCircle className="w-10 h-10" />
+              <XCircle className="w-8 h-8 sm:w-10 sm:h-10" />
             </motion.button>
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
+              exit={{ scale: 0.9, opacity: 0 }}
               className="max-w-5xl w-full"
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-bold text-white text-center mb-6">{selectedImage.title}</h3>
-              <div className="relative aspect-video rounded-2xl overflow-hidden">
+              <h3 className="text-xl sm:text-2xl font-bold text-white text-center mb-4 sm:mb-6">{selectedImage.title}</h3>
+              <div className="relative aspect-video rounded-xl sm:rounded-2xl overflow-hidden">
                 <img src={selectedImage.before} alt={selectedImage.title} className="w-full h-full object-cover" />
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      <section id="reviews" className="py-32 bg-[#0d0d0d] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="text-center mb-16">
-            <motion.div variants={fadeInUp}><Badge className="mb-6 bg-yellow-500/10 text-yellow-400 border-yellow-500/20 px-4 py-2"><Star className="w-4 h-4 mr-2 fill-yellow-400" />Customer Reviews</Badge></motion.div>
-            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">What Our Customers Say</motion.h2>
-            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">Real reviews from real customers in Westland, MI.</motion.p>
-          </motion.div>
-          <div className="grid md:grid-cols-2 gap-6">
-            {realReviews.map((review, index) => (
-              <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1, duration: 0.6 }}>
-                <Card className="bg-white/5 border-white/10 hover:border-white/20 transition-all duration-500 h-full">
-                  <CardContent className="p-8">
-                    <Quote className="w-10 h-10 text-blue-500/30 mb-4" />
-                    <p className="text-zinc-300 text-lg leading-relaxed mb-6">"{review.quote}"</p>
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">{review.name[0]}</div>
-                      <div>
-                        <p className="text-white font-semibold">{review.name}</p>
-                        <div className="flex items-center gap-2">
-                          <div className="flex">
-                            {[...Array(review.rating)].map((_, i) => (
-                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            ))}
-                          </div>
-                          <span className="text-zinc-500 text-sm">• {review.service}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="process" className="py-32 bg-[#0a0a0a] relative">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="text-center mb-20">
-            <motion.div variants={fadeInUp}><Badge className="mb-6 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 px-4 py-2">How It Works</Badge></motion.div>
-            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Our Process</motion.h2>
-            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">Simple, transparent, and professional service from start to finish.</motion.p>
-          </motion.div>
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              { step: "01", title: "Book Online", description: "Schedule your appointment through our easy online booking system or give us a call." },
-              { step: "02", title: "Drop Off", description: "Bring your vehicle to our Westland location at 38505 Ford Rd. We offer flexible drop-off times." },
-              { step: "03", title: "We Work", description: "Our expert team meticulously details your vehicle using premium products and techniques." },
-              { step: "04", title: "Drive Happy", description: "Pick up your transformed vehicle and enjoy that new car feeling!" },
-            ].map((item, index) => (
-              <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.15, duration: 0.6 }} className="text-center">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center mx-auto mb-6">
-                  <span className="text-3xl font-bold text-blue-400">{item.step}</span>
-                </div>
-                <h3 className="text-xl font-semibold text-white mb-3">{item.title}</h3>
-                <p className="text-zinc-400">{item.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="contact" className="py-32 bg-[#0d0d0d] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid lg:grid-cols-2 gap-16">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}>
-              <motion.div variants={fadeInUp}><Badge className="mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20 px-4 py-2">Get In Touch</Badge></motion.div>
-              <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Ready to Transform Your Vehicle?</motion.h2>
-              <motion.p variants={fadeInUp} className="text-xl text-zinc-400 mb-12">Get a free quote or book your appointment today. Walk-ins welcome!</motion.p>
-              <motion.div variants={staggerContainer} className="space-y-6">
-                {[
-                  { icon: MapPin, title: "Visit Us", content: "38505 Ford Rd, Westland, MI 48185" },
-                  { icon: Phone, title: "Call Us", content: "(734) 352-9000" },
-                  { icon: Clock, title: "Hours", content: "Mon-Sat: 9AM-6PM, Sun: Closed" },
-                ].map((item, index) => (
-                  <motion.div key={index} variants={fadeInUp} className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center flex-shrink-0">
-                      <item.icon className="w-6 h-6 text-blue-400" />
-                    </div>
-                    <div>
-                      <h4 className="text-white font-semibold mb-1">{item.title}</h4>
-                      <p className="text-zinc-400">{item.content}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-              <Card className="bg-white/5 border-white/10">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-semibold text-white mb-6">Send Us a Message</h3>
-                  <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div><label className="block text-sm text-zinc-400 mb-2">Name</label><input type="text" className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-colors" placeholder="Your name" /></div>
-                      <div><label className="block text-sm text-zinc-400 mb-2">Phone</label><input type="tel" className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-colors" placeholder="Your phone" /></div>
-                    </div>
-                    <div><label className="block text-sm text-zinc-400 mb-2">Service</label><select className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500/50 transition-colors"><option value="" className="bg-[#141414]">Select a service</option><option value="tinting" className="bg-[#141414]">Window Tinting</option><option value="ceramic" className="bg-[#141414]">Ceramic Coating</option><option value="ppf" className="bg-[#141414]">Paint Protection Film</option><option value="detail" className="bg-[#141414]">Full Detail Package</option><option value="interior" className="bg-[#141414]">Interior Detailing</option><option value="windshield" className="bg-[#141414]">Windshield Repair</option></select></div>
-                    <div><label className="block text-sm text-zinc-400 mb-2">Message</label><textarea rows={4} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-colors resize-none" placeholder="Tell us about your vehicle..." /></div>
-                    <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-semibold py-6 rounded-full">Send Message</Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <footer className="bg-[#0a0a0a] border-t border-white/10 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
-            <div className="md:col-span-2">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center"><Car className="w-7 h-7 text-white" /></div>
-                <span className="text-2xl font-bold text-white">AUTO SPA <span className="text-blue-400">1</span></span>
-              </div>
-              <p className="text-zinc-400 max-w-sm mb-6">Premium window tinting and auto detailing services in Westland, MI. Transforming vehicles with expert care since 2019.</p>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Services</h4>
-              <ul className="space-y-3">
-                {["Window Tinting", "Ceramic Coating", "Paint Protection", "Auto Detailing", "Windshield Repair"].map((service) => (
-                  <li key={service}><button onClick={() => scrollToSection("services")} className="text-zinc-400 hover:text-white transition-colors">{service}</button></li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Contact</h4>
-              <ul className="space-y-3 text-zinc-400">
-                <li>38505 Ford Rd</li>
-                <li>Westland, MI 48185</li>
-                <li><a href="tel:734-352-9000" className="hover:text-white transition-colors">(734) 352-9000</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-zinc-500 text-sm">&copy; 2025 Auto Spa 1. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
