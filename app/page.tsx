@@ -207,11 +207,9 @@ export default function Home() {
             <img 
               src="/images/hero-skyline.webp" 
               alt="Auto Spa 1 - Nissan Skyline R34" 
-              className="w-full h-full object-cover opacity-70 scale-110"
-              style={{ objectPosition: 'center 30%' }}
+              className="w-full h-full object-cover opacity-90"
+              style={{ objectPosition: 'center 30%', imageRendering: 'crisp-edges' }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/60 via-[#0a0a0a]/40 to-[#0a0a0a]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent" />
           </div>
           <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px]" />
           <motion.div animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px]" />
