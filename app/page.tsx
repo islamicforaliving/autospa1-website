@@ -641,6 +641,7 @@ export default function Home() {
                 <li>38505 Ford Rd</li>
                 <li>Westland, MI 48185</li>
                 <li><a href="tel:734-352-9000" className="hover:text-white transition-colors">(734) 352-9000</a></li>
+                <li><a href="mailto:autospawestland@gmail.com" className="hover:text-white transition-colors">autospawestland@gmail.com</a></li>
               </ul>
             </div>
           </div>
