@@ -106,6 +106,11 @@ const pricingPackages = [
 
 const showcaseImages = [
   { 
+    src: "/images/hero-skyline.webp",
+    title: "Nissan Skyline R34",
+    description: "Premium ceramic tint with color-shifting finish"
+  },
+  { 
     src: "/images/showcase-1.webp",
     title: "Premium Window Tinting",
     description: "Ceramic tint installation on Cadillac CT4-V"
@@ -202,14 +207,15 @@ export default function Home() {
 
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <motion.div style={{ y: heroY, opacity: heroOpacity }} className="absolute inset-0">
-          {/* Hero Background Image - Nissan Skyline */}
+          {/* Hero Background Image - Stock Car Image */}
           <div className="absolute inset-0">
             <img 
-              src="/images/hero-skyline.webp" 
-              alt="Auto Spa 1 - Nissan Skyline R34" 
-              className="w-full h-full object-cover opacity-90"
-              style={{ objectPosition: 'center 30%', imageRendering: 'crisp-edges' }}
+              src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=85" 
+              alt="Premium Auto Detailing" 
+              className="w-full h-full object-cover"
+              style={{ objectPosition: 'center center' }}
             />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/70 via-[#0a0a0a]/50 to-[#0a0a0a]/90" />
           </div>
           <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[120px]" />
           <motion.div animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px]" />
@@ -217,16 +223,22 @@ export default function Home() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="text-center">
-            <motion.div variants={fadeInUp}>
-              <Badge className="mb-8 bg-white/5 text-white border-white/10 hover:bg-white/10 backdrop-blur-sm px-4 py-2">
-                <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-400" />#1 Rated Auto Detailing in Westland
-              </Badge>
+            {/* Text Container with Background Shadow */}
+            <motion.div 
+              variants={fadeInUp}
+              className="inline-block bg-black/40 backdrop-blur-md rounded-3xl px-8 py-10 border border-white/10 shadow-2xl shadow-black/50"
+            >
+              <motion.div className="mb-6">
+                <Badge className="bg-white/10 text-white border-white/20 hover:bg-white/20 backdrop-blur-sm px-4 py-2">
+                  <Star className="w-4 h-4 mr-2 fill-yellow-400 text-yellow-400" />#1 Rated Auto Detailing in Westland
+                </Badge>
+              </motion.div>
+              <motion.h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold text-white tracking-tight mb-6 drop-shadow-2xl">
+                <span className="block drop-shadow-lg">Transform Your</span>
+                <motion.span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg" animate={{ backgroundPosition: ["0%", "100%", "0%"] }} transition={{ duration: 5, repeat: Infinity }}>Vehicle Today</motion.span>
+              </motion.h1>
+              <motion.p className="text-xl text-zinc-200 max-w-2xl mx-auto drop-shadow-lg">Premium window tinting, ceramic coating, and auto detailing in Westland, MI. Experience the Auto Spa 1 difference.</motion.p>
             </motion.div>
-            <motion.h1 variants={fadeInUp} className="text-5xl sm:text-6xl lg:text-8xl font-bold text-white tracking-tight mb-8">
-              <span className="block">Transform Your</span>
-              <motion.span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent" animate={{ backgroundPosition: ["0%", "100%", "0%"] }} transition={{ duration: 5, repeat: Infinity }}>Vehicle Today</motion.span>
-            </motion.h1>
-            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto mb-12">Premium window tinting, ceramic coating, and auto detailing in Westland, MI. Experience the Auto Spa 1 difference.</motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center mb-20">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button size="lg" onClick={() => scrollToSection("contact")} className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-semibold px-10 py-7 text-lg rounded-full">Get Free Quote<ArrowRight className="ml-2 w-5 h-5" /></Button>
