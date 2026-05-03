@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Menu, X, Phone, MapPin, Clock, Star, Shield, Sparkles, Car, Sun,
   Droplets, CheckCircle, ArrowRight, ChevronRight, Quote, Award, Users, ThumbsUp,
+  ChevronLeft, Play, Pause, ZoomIn, XCircle, Camera, Zap, Heart
 } from "lucide-react";
 
 const fadeInUp = { hidden: { opacity: 0, y: 60 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } } };
@@ -49,8 +50,100 @@ const services = [
   { icon: CheckCircle, title: "Windshield Repair", description: "Professional chip and crack repair to restore visibility and prevent further damage. Quick same-day service.", price: "$89", features: ["Same-Day Service", "Chip Repair", "Crack Repair", "Insurance Approved"] },
 ];
 
+const pricingPackages = [
+  {
+    name: "Exterior Package",
+    description: "Complete exterior detailing and protection",
+    features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Door Jambs", "Windows", "All Chrome", "Gas Door", "Add Paint Sealant"],
+    note: "Black & White Vehicles $20 extra",
+    prices: [
+      { vehicle: "Car", price: 160 },
+      { vehicle: "Pick Up", price: 200 },
+      { vehicle: "Small SUV", price: 190 },
+      { vehicle: "SUV & Minivan", price: 200 },
+      { vehicle: "Large SUV", price: 220 },
+      { vehicle: "Conversion Van", price: 220 },
+    ],
+    popular: false,
+    color: "from-blue-500 to-cyan-400",
+    image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
+  },
+  {
+    name: "Interior Package",
+    description: "Deep interior cleaning and restoration",
+    features: ["Vacuum & Shampoo", "Leather Treatment", "Dashboard & Console", "Door Panels", "Odor Elimination", "Stain Removal", "Floor Mats", "Headliner Cleaning"],
+    note: "",
+    prices: [
+      { vehicle: "Car", price: 140 },
+      { vehicle: "Pick Up", price: 170 },
+      { vehicle: "Small SUV", price: 160 },
+      { vehicle: "SUV & Minivan", price: 180 },
+      { vehicle: "Large SUV", price: 200 },
+      { vehicle: "Conversion Van", price: 200 },
+    ],
+    popular: false,
+    color: "from-purple-500 to-pink-400",
+    image: "https://images.unsplash.com/photo-1507136566006-cfc505b114fc?w=800&q=80",
+  },
+  {
+    name: "Complete Package",
+    description: "The ultimate full-service detail",
+    features: ["Interior Package", "Exterior Package", "FREE Engine Bay Detail", "Paint Sealant Included", "Full Protection"],
+    note: "Best Value - Save $40+",
+    prices: [
+      { vehicle: "Car", price: 280 },
+      { vehicle: "Pick Up", price: 350 },
+      { vehicle: "Small SUV", price: 330 },
+      { vehicle: "SUV & Minivan", price: 360 },
+      { vehicle: "Large SUV", price: 400 },
+      { vehicle: "Conversion Van", price: 400 },
+    ],
+    popular: true,
+    color: "from-amber-500 to-orange-400",
+    image: "https://images.unsplash.com/photo-1551522435-a13afa10f103?w=800&q=80",
+  },
+];
+
+const galleryImages = [
+  { 
+    before: "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800&q=80", 
+    after: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
+    title: "Ceramic Coating Transformation",
+    description: "5-year protection with mirror-like finish"
+  },
+  { 
+    before: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80", 
+    after: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80",
+    title: "Interior Deep Clean",
+    description: "Leather restoration & stain removal"
+  },
+  { 
+    before: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80", 
+    after: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80",
+    title: "Full Detail Package",
+    description: "Complete interior & exterior restoration"
+  },
+  { 
+    before: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80", 
+    after: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
+    title: "Window Tinting",
+    description: "Premium ceramic tint installation"
+  },
+];
+
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedVehicle, setSelectedVehicle] = useState<{[key: string]: string}>({
+    "Exterior Package": "Car",
+    "Interior Package": "Car", 
+    "Complete Package": "Car"
+  });
+  const [hoveredPackage, setHoveredPackage] = useState<string | null>(null);
+  const [currentGalleryIndex, setCurrentGalleryIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<{before: string, after: string, title: string} | null>(null);
+  const [showBeforeAfter, setShowBeforeAfter] = useState<{[key: number]: boolean}>({});
+  
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
@@ -59,6 +152,20 @@ export default function Home() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) { element.scrollIntoView({ behavior: "smooth" }); setIsMenuOpen(false); }
+  };
+
+  // Auto-play gallery
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    const interval = setInterval(() => {
+      setCurrentGalleryIndex((prev) => (prev + 1) % galleryImages.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isAutoPlaying]);
+
+  const getPrice = (pkg: typeof pricingPackages[0], vehicleType: string) => {
+    const price = pkg.prices.find(p => p.vehicle === vehicleType)?.price || pkg.prices[0].price;
+    return price;
   };
 
   return (
@@ -73,7 +180,7 @@ export default function Home() {
               <span className="text-xl font-bold text-white tracking-tight">AUTO SPA <span className="text-blue-400">1</span></span>
             </motion.a>
             <div className="hidden md:flex items-center gap-8">
-              {["Services", "Reviews", "Process", "Contact"].map((item) => (
+              {["Services", "Gallery", "Pricing", "Reviews", "Contact"].map((item) => (
                 <motion.button key={item} onClick={() => scrollToSection(item.toLowerCase())} className="text-sm text-zinc-400 hover:text-white transition-colors relative group" whileHover={{ y: -2 }}>
                   {item}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 group-hover:w-full transition-all duration-300" />
@@ -88,16 +195,18 @@ export default function Home() {
             </motion.button>
           </div>
         </div>
-        {isMenuOpen && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="md:hidden bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/10">
-            <div className="px-4 py-6 space-y-4">
-              {["Services", "Reviews", "Process", "Contact"].map((item) => (
-                <motion.button key={item} onClick={() => scrollToSection(item.toLowerCase())} className="block w-full text-left text-zinc-400 hover:text-white py-3 border-b border-white/5" whileHover={{ x: 10 }}>{item}</motion.button>
-              ))}
-              <Button onClick={() => scrollToSection("contact")} className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white mt-4">Get Quote</Button>
-            </div>
-          </motion.div>
-        )}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="md:hidden bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/10">
+              <div className="px-4 py-6 space-y-4">
+                {["Services", "Gallery", "Pricing", "Reviews", "Process", "Contact"].map((item) => (
+                  <motion.button key={item} onClick={() => scrollToSection(item.toLowerCase())} className="block w-full text-left text-zinc-400 hover:text-white py-3 border-b border-white/5" whileHover={{ x: 10 }}>{item}</motion.button>
+                ))}
+                <Button onClick={() => scrollToSection("contact")} className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white mt-4">Get Quote</Button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.nav>
 
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -125,7 +234,7 @@ export default function Home() {
                 <Button size="lg" onClick={() => scrollToSection("contact")} className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-semibold px-10 py-7 text-lg rounded-full">Get Free Quote<ArrowRight className="ml-2 w-5 h-5" /></Button>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" variant="outline" onClick={() => scrollToSection("services")} className="border-white/20 text-white hover:bg-white/10 font-semibold px-10 py-7 text-lg rounded-full">View Services</Button>
+                <Button size="lg" variant="outline" onClick={() => scrollToSection("gallery")} className="border-white/20 text-white hover:bg-white/10 font-semibold px-10 py-7 text-lg rounded-full">View Our Work</Button>
               </motion.div>
             </motion.div>
             <motion.div variants={staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
@@ -138,11 +247,6 @@ export default function Home() {
             </motion.div>
           </motion.div>
         </div>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }} className="absolute bottom-8 left-1/2 -translate-x-1/2">
-          <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 1.5, repeat: Infinity }} className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center pt-2">
-            <motion.div animate={{ opacity: [1, 0], y: [0, 12] }} transition={{ duration: 1.5, repeat: Infinity }} className="w-1.5 h-1.5 bg-white rounded-full" />
-          </motion.div>
-        </motion.div>
       </section>
 
       <section id="services" className="py-32 bg-[#0a0a0a] relative">
@@ -153,10 +257,10 @@ export default function Home() {
             <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Our Services</motion.h2>
             <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">From window tinting to full detailing packages, we provide premium automotive services tailored to your needs.</motion.p>
           </motion.div>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service, index) => (
-              <motion.div key={index} variants={fadeInUp} whileHover={{ y: -10, transition: { duration: 0.3 } }}>
-                <Card className="bg-gradient-to-br from-white/5 to-white/[0.02] border-white/10 hover:border-white/20 transition-all duration-500 h-full group overflow-hidden">
+              <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1, duration: 0.6 }}>
+                <Card className="group bg-gradient-to-br from-white/5 to-white/[0.02] border-white/10 hover:border-white/20 transition-all duration-500 h-full overflow-hidden">
                   <CardContent className="p-8 relative">
                     <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-500/30 transition-all duration-500" />
                     <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -166,77 +270,484 @@ export default function Home() {
                     <p className="text-zinc-400 mb-6 leading-relaxed">{service.description}</p>
                     <ul className="space-y-2 mb-6">
                       {service.features.map((feature, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm text-zinc-500"><CheckCircle className="w-4 h-4 text-emerald-400" />{feature}</li>
+                        <li key={i} className="flex items-center gap-2 text-sm text-zinc-500">
+                          <CheckCircle className="w-4 h-4 text-emerald-400" />
+                          {feature}
+                        </li>
                       ))}
                     </ul>
-                    <div className="flex items-center justify-between pt-6 border-t border-white/10">
-                      <div><span className="text-zinc-500 text-sm">Starting at</span><div className="text-3xl font-bold text-white">{service.price}</div></div>
-                      <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.9 }}>
-                        <Button size="sm" onClick={() => scrollToSection("contact")} className="bg-white/10 hover:bg-white/20 text-white rounded-full">Book Now<ChevronRight className="w-4 h-4 ml-1" /></Button>
+                    <div className="flex items-center justify-between">
+                      <span className="text-3xl font-bold text-white">{service.price}</span>
+                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                        <Button variant="outline" size="sm" onClick={() => scrollToSection("contact")} className="border-white/20 text-white hover:bg-white/10">Book Now</Button>
                       </motion.div>
                     </div>
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* NEW: Gallery Section with Before/After */}
+      <section id="gallery" className="py-32 bg-[#0d0d0d] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="text-center mb-16">
+            <motion.div variants={fadeInUp}><Badge className="mb-6 bg-purple-500/10 text-purple-400 border-purple-500/20 px-4 py-2"><Camera className="w-4 h-4 mr-2" />Our Work</Badge></motion.div>
+            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Before & After Gallery</motion.h2>
+            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">See the Auto Spa 1 difference. Real transformations, real results.</motion.p>
+          </motion.div>
+
+          {/* Main Gallery Carousel */}
+          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative mb-12">
+            <div className="relative aspect-video max-w-4xl mx-auto rounded-2xl overflow-hidden bg-zinc-900">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentGalleryIndex}
+                  initial={{ opacity: 0, x: 100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -100 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0"
+                >
+                  {/* Before/After Comparison */}
+                  <div className="relative w-full h-full group cursor-pointer" onClick={() => setSelectedImage(galleryImages[currentGalleryIndex])}>
+                    <div className="absolute inset-0 flex">
+                      {/* Before Image */}
+                      <div className="w-1/2 relative overflow-hidden">
+                        <img 
+                          src={galleryImages[currentGalleryIndex].before} 
+                          alt="Before" 
+                          className="w-full h-full object-cover grayscale"
+                        />
+                        <div className="absolute top-4 left-4 bg-red-500/90 text-white px-3 py-1 rounded-full text-sm font-semibold">BEFORE</div>
+                      </div>
+                      {/* After Image */}
+                      <div className="w-1/2 relative overflow-hidden">
+                        <img 
+                          src={galleryImages[currentGalleryIndex].after} 
+                          alt="After" 
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute top-4 right-4 bg-emerald-500/90 text-white px-3 py-1 rounded-full text-sm font-semibold">AFTER</div>
+                      </div>
+                    </div>
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                      <motion.div 
+                        initial={{ scale: 0 }} 
+                        whileHover={{ scale: 1 }}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      >
+                        <div className="bg-white/20 backdrop-blur-sm p-4 rounded-full">
+                          <ZoomIn className="w-8 h-8 text-white" />
+                        </div>
+                      </motion.div>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+              
+              {/* Navigation Arrows */}
+              <button 
+                onClick={() => setCurrentGalleryIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length)}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button 
+                onClick={() => setCurrentGalleryIndex((prev) => (prev + 1) % galleryImages.length)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+
+              {/* Play/Pause */}
+              <button 
+                onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+                className="absolute bottom-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full backdrop-blur-sm transition-all"
+              >
+                {isAutoPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+              </button>
+            </div>
+
+            {/* Gallery Info */}
+            <div className="text-center mt-6">
+              <motion.h3 
+                key={currentGalleryIndex}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-2xl font-bold text-white mb-2"
+              >
+                {galleryImages[currentGalleryIndex].title}
+              </motion.h3>
+              <motion.p 
+                key={`desc-${currentGalleryIndex}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="text-zinc-400"
+              >
+                {galleryImages[currentGalleryIndex].description}
+              </motion.p>
+            </div>
+
+            {/* Thumbnail Navigation */}
+            <div className="flex justify-center gap-3 mt-8">
+              {galleryImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentGalleryIndex(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === currentGalleryIndex ? 'bg-blue-500 w-8' : 'bg-white/30 hover:bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Grid of All Transformations */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {galleryImages.map((image, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
+                onClick={() => setSelectedImage(image)}
+              >
+                <div className="absolute inset-0 flex">
+                  <div className="w-1/2 relative">
+                    <img src={image.before} alt="Before" className="w-full h-full object-cover grayscale" />
+                    <span className="absolute top-3 left-3 bg-red-500/90 text-white text-xs px-2 py-1 rounded">BEFORE</span>
+                  </div>
+                  <div className="w-1/2 relative">
+                    <img src={image.after} alt="After" className="w-full h-full object-cover" />
+                    <span className="absolute top-3 right-3 bg-emerald-500/90 text-white text-xs px-2 py-1 rounded">AFTER</span>
+                  </div>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h4 className="text-white font-semibold">{image.title}</h4>
+                    <p className="text-zinc-300 text-sm">{image.description}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Pricing Section */}
+      <section id="pricing" className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-900/10 via-transparent to-transparent" />
+        
+        {/* Animated Background Elements */}
+        <motion.div 
+          animate={{ rotate: 360, scale: [1, 1.1, 1] }} 
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/5 rounded-full blur-[100px]" 
+        />
+        <motion.div 
+          animate={{ rotate: -360, scale: [1, 1.2, 1] }} 
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-20 -right-40 w-96 h-96 bg-purple-500/5 rounded-full blur-[100px]" 
+        />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="text-center mb-16">
+            <motion.div variants={fadeInUp}>
+              <Badge className="mb-6 bg-amber-500/10 text-amber-400 border-amber-500/20 px-4 py-2">
+                <Zap className="w-4 h-4 mr-2" />Transparent Pricing
+              </Badge>
+            </motion.div>
+            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Detailing Packages</motion.h2>
+            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">Professional detailing tailored to your vehicle type. All packages include our satisfaction guarantee.</motion.p>
+          </motion.div>
+
+          {/* Interactive Pricing Cards */}
+          <div className="grid lg:grid-cols-3 gap-8 mb-12">
+            {pricingPackages.map((pkg, index) => (
+              <motion.div 
+                key={index} 
+                initial={{ opacity: 0, y: 60, rotateX: -15 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2, duration: 0.7, type: "spring" }}
+                whileHover={{ y: -10, scale: 1.02 }}
+                onHoverStart={() => setHoveredPackage(pkg.name)}
+                onHoverEnd={() => setHoveredPackage(null)}
+                className="perspective-1000"
+              >
+                <Card className={`h-full relative overflow-hidden ${pkg.popular ? 'border-amber-500/50 shadow-2xl shadow-amber-500/10' : 'border-white/10'} bg-zinc-900/50 backdrop-blur-sm transition-all duration-500`}>
+                  {/* Popular Badge */}
+                  {pkg.popular && (
+                    <motion.div 
+                      initial={{ x: 100, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.5, type: "spring" }}
+                      className="absolute top-0 right-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-bl-lg z-10"
+                    >
+                      <Star className="w-3 h-3 inline mr-1 fill-white" /> BEST VALUE
+                    </motion.div>
+                  )}
+
+                  {/* Card Image */}
+                  <div className="relative h-48 overflow-hidden">
+                    <motion.img 
+                      src={pkg.image} 
+                      alt={pkg.name}
+                      className="w-full h-full object-cover"
+                      animate={{ scale: hoveredPackage === pkg.name ? 1.1 : 1 }}
+                      transition={{ duration: 0.4 }}
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent`} />
+                    <div className={`absolute inset-0 bg-gradient-to-br ${pkg.color} opacity-20`} />
+                  </div>
+
+                  <CardContent className="p-6 relative">
+                    {/* Package Name & Description */}
+                    <h3 className="text-2xl font-bold text-white mb-2">{pkg.name}</h3>
+                    <p className="text-zinc-400 text-sm mb-4">{pkg.description}</p>
+
+                    {/* Animated Price Display */}
+                    <div className="mb-6">
+                      <motion.div 
+                        key={selectedVehicle[pkg.name]}
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="text-5xl font-bold text-white"
+                      >
+                        <span className="text-2xl text-zinc-500">$</span>
+                        {getPrice(pkg, selectedVehicle[pkg.name])}
+                      </motion.div>
+                      <p className="text-zinc-500 text-sm mt-1">Starting price</p>
+                    </div>
+
+                    {/* Interactive Vehicle Selector */}
+                    <div className="mb-6">
+                      <p className="text-zinc-400 text-xs mb-2 uppercase tracking-wider">Select your vehicle</p>
+                      <div className="grid grid-cols-3 gap-2">
+                        {["Car", "Pick Up", "Small SUV", "SUV & Minivan", "Large SUV", "Conversion Van"].map((vehicle) => (
+                          <motion.button
+                            key={vehicle}
+                            onClick={() => setSelectedVehicle({...selectedVehicle, [pkg.name]: vehicle})}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className={`py-2 px-1 text-xs rounded-lg transition-all duration-300 ${
+                              selectedVehicle[pkg.name] === vehicle 
+                                ? `bg-gradient-to-r ${pkg.color} text-white font-semibold shadow-lg` 
+                                : 'bg-white/5 text-zinc-400 hover:bg-white/10'
+                            }`}
+                          >
+                            {vehicle}
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Features with Stagger Animation */}
+                    <div className="space-y-2 mb-6">
+                      {pkg.features.map((feature, i) => (
+                        <motion.div 
+                          key={i}
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: i * 0.05 }}
+                          className="flex items-center gap-3 text-zinc-300"
+                        >
+                          <motion.div
+                            whileHover={{ scale: 1.2, rotate: 360 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <CheckCircle className={`w-5 h-5 ${pkg.popular ? 'text-amber-400' : 'text-emerald-400'} flex-shrink-0`} />
+                          </motion.div>
+                          <span className="text-sm">{feature}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {pkg.note && (
+                      <motion.p 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-amber-400 text-xs mb-4 italic flex items-center gap-2"
+                      >
+                        <Sparkles className="w-3 h-3" /> {pkg.note}
+                      </motion.p>
+                    )}
+
+                    {/* CTA Button with Glow Effect */}
+                    <motion.div 
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="relative"
+                    >
+                      {pkg.popular && (
+                        <motion.div
+                          animate={{ opacity: [0.5, 1, 0.5] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                          className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full blur opacity-30"
+                        />
+                      )}
+                      <Button 
+                        onClick={() => scrollToSection("contact")}
+                        className={`w-full py-6 rounded-full font-semibold relative overflow-hidden ${
+                          pkg.popular 
+                            ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:shadow-lg hover:shadow-amber-500/25' 
+                            : 'bg-white/10 text-white hover:bg-white/20'
+                        }`}
+                      >
+                        <motion.span
+                          initial={{ x: 0 }}
+                          whileHover={{ x: 5 }}
+                          className="flex items-center justify-center gap-2"
+                        >
+                          Book {pkg.name}
+                          <ArrowRight className="w-4 h-4" />
+                        </motion.span>
+                      </Button>
+                    </motion.div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Trust Badges */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-wrap justify-center gap-6 mt-12"
+          >
+            {[
+              { icon: Shield, text: "Satisfaction Guaranteed" },
+              { icon: Clock, text: "Same-Day Service Available" },
+              { icon: Award, text: "Licensed & Insured" },
+              { icon: Heart, text: "500+ Happy Customers" },
+            ].map((badge, i) => (
+              <motion.div 
+                key={i}
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10"
+              >
+                <badge.icon className="w-4 h-4 text-blue-400" />
+                <span className="text-zinc-300 text-sm">{badge.text}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.5 }} className="text-center mt-8">
+            <p className="text-zinc-500 text-sm">* Additional charges may apply for excessive dirt, pet hair, or biohazard cleanup. Black & white vehicles add $20 for Exterior Package.</p>
           </motion.div>
         </div>
       </section>
 
-      <section id="reviews" className="py-32 bg-[#0d0d0d] relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-1/2 left-0 w-[800px] h-[800px] bg-purple-500/5 rounded-full blur-[150px] -translate-y-1/2" />
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="text-center mb-20">
-            <motion.div variants={fadeInUp}><Badge className="mb-6 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 px-4 py-2"><ThumbsUp className="w-4 h-4 mr-2" />157+ Happy Customers</Badge></motion.div>
-            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">What Our Customers Say</motion.h2>
-            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">Real reviews from real customers in Westland and beyond.</motion.p>
-          </motion.div>
-          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-12">
-            <Card className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/20 max-w-4xl mx-auto">
-              <CardContent className="p-10">
-                <Quote className="w-12 h-12 text-blue-400 mb-6" />
-                <p className="text-2xl text-white leading-relaxed mb-6">&ldquo;Guss and Employees Did a Great Job on My 1 Half Old Truck with Detailing the inside of the truck and Ceramic coating wax. My Truck is Better Than When It was Brand New. I Give His Team more than 5 Star!&rdquo;</p>
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl">S</div>
-                  <div><div className="text-white font-semibold text-lg">Scott</div><div className="text-zinc-400">Ceramic Coating & Detailing</div></div>
-                  <div className="ml-auto flex gap-1">{[...Array(5)].map((_, i) => (<Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />))}</div>
+      {/* Image Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4"
+            onClick={() => setSelectedImage(null)}
+          >
+            <motion.button
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="absolute top-6 right-6 text-white/70 hover:text-white z-10"
+              onClick={() => setSelectedImage(null)}
+            >
+              <XCircle className="w-10 h-10" />
+            </motion.button>
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="max-w-5xl w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="text-2xl font-bold text-white text-center mb-6">{selectedImage.title}</h3>
+              <div className="relative aspect-video rounded-2xl overflow-hidden">
+                <div className="absolute inset-0 flex">
+                  <div className="w-1/2 relative">
+                    <img src={selectedImage.before} alt="Before" className="w-full h-full object-cover grayscale" />
+                    <span className="absolute top-4 left-4 bg-red-500 text-white px-4 py-2 rounded-full font-semibold">BEFORE</span>
+                  </div>
+                  <div className="w-1/2 relative">
+                    <img src={selectedImage.after} alt="After" className="w-full h-full object-cover" />
+                    <span className="absolute top-4 right-4 bg-emerald-500 text-white px-4 py-2 rounded-full font-semibold">AFTER</span>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </motion.div>
           </motion.div>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="grid md:grid-cols-3 gap-6">
-            {realReviews.slice(1).map((review, index) => (
-              <motion.div key={index} variants={fadeInUp}>
-                <Card className="bg-white/5 border-white/10 hover:border-white/20 transition-all h-full">
-                  <CardContent className="p-6">
-                    <div className="flex gap-1 mb-4">{[...Array(review.rating)].map((_, i) => (<Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />))}</div>
-                    <p className="text-zinc-300 mb-6 leading-relaxed">&ldquo;{review.quote}&rdquo;</p>
-                    <div className="flex items-center gap-3 pt-4 border-t border-white/10">
-                      <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center"><span className="text-sm font-medium text-white">{review.name.charAt(0)}</span></div>
-                      <div><p className="text-white font-medium">{review.name}</p><p className="text-zinc-500 text-sm">{review.service}</p></div>
+        )}
+      </AnimatePresence>
+
+      <section id="reviews" className="py-32 bg-[#0d0d0d] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="text-center mb-16">
+            <motion.div variants={fadeInUp}><Badge className="mb-6 bg-yellow-500/10 text-yellow-400 border-yellow-500/20 px-4 py-2"><Star className="w-4 h-4 mr-2 fill-yellow-400" />Customer Reviews</Badge></motion.div>
+            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">What Our Customers Say</motion.h2>
+            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">Real reviews from real customers in Westland, MI.</motion.p>
+          </motion.div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {realReviews.map((review, index) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1, duration: 0.6 }}>
+                <Card className="bg-white/5 border-white/10 hover:border-white/20 transition-all duration-500 h-full">
+                  <CardContent className="p-8">
+                    <Quote className="w-10 h-10 text-blue-500/30 mb-4" />
+                    <p className="text-zinc-300 text-lg leading-relaxed mb-6">"{review.quote}"</p>
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">{review.name[0]}</div>
+                      <div>
+                        <p className="text-white font-semibold">{review.name}</p>
+                        <div className="flex items-center gap-2">
+                          <div className="flex">
+                            {[...Array(review.rating)].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            ))}
+                          </div>
+                          <span className="text-zinc-500 text-sm">• {review.service}</span>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
       <section id="process" className="py-32 bg-[#0a0a0a] relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="text-center mb-20">
-            <motion.div variants={fadeInUp}><Badge className="mb-6 bg-purple-500/10 text-purple-400 border-purple-500/20 px-4 py-2">Simple & Easy</Badge></motion.div>
-            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">How It Works</motion.h2>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="text-center mb-20">
+            <motion.div variants={fadeInUp}><Badge className="mb-6 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 px-4 py-2">How It Works</Badge></motion.div>
+            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Our Process</motion.h2>
+            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">Simple, transparent, and professional service from start to finish.</motion.p>
           </motion.div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[{ step: "01", title: "Book Appointment", description: "Call or text us to schedule. Same-day appointments often available!", icon: Phone }, { step: "02", title: "Drop Off Vehicle", description: "Bring your car to our shop at 38505 Ford Rd, Westland.", icon: MapPin }, { step: "03", title: "We Work Our Magic", description: "Our expert team transforms your vehicle with precision care.", icon: Sparkles }, { step: "04", title: "Pick Up & Enjoy", description: "Drive away in a vehicle that looks better than new!", icon: Car }].map((item, index) => (
-              <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1, duration: 0.6 }} className="relative">
-                {index < 3 && (<div className="hidden lg:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-white/20 to-transparent" />)}
-                <div className="text-7xl font-bold text-white/5 mb-4">{item.step}</div>
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center mb-6"><item.icon className="w-8 h-8 text-blue-400" /></div>
+          <div className="grid md:grid-cols-4 gap-8">
+            {[
+              { step: "01", title: "Book Online", description: "Schedule your appointment through our easy online booking system or give us a call." },
+              { step: "02", title: "Drop Off", description: "Bring your vehicle to our Westland location at 38505 Ford Rd. We offer flexible drop-off times." },
+              { step: "03", title: "We Work", description: "Our expert team meticulously details your vehicle using premium products and techniques." },
+              { step: "04", title: "Drive Happy", description: "Pick up your transformed vehicle and enjoy that new car feeling!" },
+            ].map((item, index) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.15, duration: 0.6 }} className="text-center">
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center mx-auto mb-6">
+                  <span className="text-3xl font-bold text-blue-400">{item.step}</span>
+                </div>
                 <h3 className="text-xl font-semibold text-white mb-3">{item.title}</h3>
                 <p className="text-zinc-400">{item.description}</p>
               </motion.div>
@@ -245,57 +756,37 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-32 bg-[#0d0d0d] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent" />
+      <section id="contact" className="py-32 bg-[#0d0d0d] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
-              <motion.div variants={fadeInUp}><Badge className="mb-6 bg-amber-500/10 text-amber-400 border-amber-500/20 px-4 py-2"><Award className="w-4 h-4 mr-2" />Voted #1 in Westland</Badge></motion.div>
-              <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl font-bold text-white mb-6">Why Choose Auto Spa 1?</motion.h2>
-              <motion.p variants={fadeInUp} className="text-xl text-zinc-400 mb-10">We don&apos;t just clean vehicles — we restore, protect, and maintain them. Our expert service guarantees results that exceed expectations.</motion.p>
+          <div className="grid lg:grid-cols-2 gap-16">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}>
+              <motion.div variants={fadeInUp}><Badge className="mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20 px-4 py-2">Get In Touch</Badge></motion.div>
+              <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Ready to Transform Your Vehicle?</motion.h2>
+              <motion.p variants={fadeInUp} className="text-xl text-zinc-400 mb-12">Get a free quote or book your appointment today. Walk-ins welcome!</motion.p>
               <motion.div variants={staggerContainer} className="space-y-6">
-                {[{ icon: Users, title: "Expert Technicians", desc: "Trained professionals with years of experience" }, { icon: Clock, title: "Same-Day Service", desc: "Quick turnaround without compromising quality" }, { icon: Shield, title: "Satisfaction Guaranteed", desc: "100% satisfaction or we&apos;ll make it right" }, { icon: Award, title: "Premium Products", desc: "Only the best ceramic coatings and films" }].map((feature, index) => (
-                  <motion.div key={index} variants={fadeInUp} className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 transition-all" whileHover={{ x: 10 }}>
-                    <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center flex-shrink-0"><feature.icon className="w-6 h-6 text-blue-400" /></div>
-                    <div><h4 className="text-white font-semibold mb-1">{feature.title}</h4><p className="text-zinc-400">{feature.desc}</p></div>
+                {[
+                  { icon: MapPin, title: "Visit Us", content: "38505 Ford Rd, Westland, MI 48185" },
+                  { icon: Phone, title: "Call Us", content: "(734) 352-9000" },
+                  { icon: Clock, title: "Hours", content: "Mon-Sat: 9AM-6PM, Sun: Closed" },
+                ].map((item, index) => (
+                  <motion.div key={index} variants={fadeInUp} className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center flex-shrink-0">
+                      <item.icon className="w-6 h-6 text-blue-400" />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold mb-1">{item.title}</h4>
+                      <p className="text-zinc-400">{item.content}</p>
+                    </div>
                   </motion.div>
                 ))}
               </motion.div>
             </motion.div>
-            <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="relative">
-              <div className="relative rounded-3xl overflow-hidden">
-                <div className="aspect-square bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-3xl flex items-center justify-center">
-                  <div className="text-center p-12">
-                    <Car className="w-32 h-32 text-blue-400 mx-auto mb-6" />
-                    <h3 className="text-3xl font-bold text-white mb-4">Ready to Transform?</h3>
-                    <p className="text-zinc-400 mb-8 max-w-md">Book your appointment today and see why we&apos;re Westland&apos;s #1 choice for auto detailing.</p>
-                    <Button size="lg" onClick={() => scrollToSection("contact")} className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-semibold px-8 py-6 rounded-full">Get Started Now<ArrowRight className="ml-2 w-5 h-5" /></Button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <section id="contact" className="py-32 bg-[#0a0a0a] relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="text-center mb-16">
-            <motion.div variants={fadeInUp}><Badge className="mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20 px-4 py-2">Get In Touch</Badge></motion.div>
-            <motion.h2 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">Ready to Transform Your Vehicle?</motion.h2>
-            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mx-auto">Book your appointment today. Walk-ins welcome, appointments recommended.</motion.p>
-          </motion.div>
-          <div className="grid lg:grid-cols-2 gap-12">
-            <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="space-y-8">
-              <Card className="bg-white/5 border-white/10"><CardContent className="p-8"><div className="flex items-start gap-4"><div className="w-14 h-14 rounded-xl bg-blue-500/10 flex items-center justify-center flex-shrink-0"><MapPin className="w-7 h-7 text-blue-400" /></div><div><h3 className="text-xl font-semibold text-white mb-2">Visit Us</h3><p className="text-zinc-400">38505 Ford Rd<br />Westland, MI 48185</p></div></div></CardContent></Card>
-              <Card className="bg-white/5 border-white/10"><CardContent className="p-8"><div className="flex items-start gap-4"><div className="w-14 h-14 rounded-xl bg-purple-500/10 flex items-center justify-center flex-shrink-0"><Phone className="w-7 h-7 text-purple-400" /></div><div><h3 className="text-xl font-semibold text-white mb-2">Call or Text</h3><a href="tel:734-352-9000" className="text-zinc-400 hover:text-white transition-colors text-lg">(734) 352-9000</a></div></div></CardContent></Card>
-              <Card className="bg-white/5 border-white/10"><CardContent className="p-8"><div className="flex items-start gap-4"><div className="w-14 h-14 rounded-xl bg-emerald-500/10 flex items-center justify-center flex-shrink-0"><Clock className="w-7 h-7 text-emerald-400" /></div><div><h3 className="text-xl font-semibold text-white mb-2">Hours</h3><p className="text-zinc-400">Mon - Fri: 9:00 AM - 6:00 PM<br />Sat: 8:00 AM - 3:00 PM<br />Sun: Closed</p></div></div></CardContent></Card>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
               <Card className="bg-white/5 border-white/10">
                 <CardContent className="p-8">
-                  <h3 className="text-2xl font-semibold text-white mb-6">Request a Quote</h3>
-                  <form className="space-y-4">
+                  <h3 className="text-2xl font-semibold text-white mb-6">Send Us a Message</h3>
+                  <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div><label className="block text-sm text-zinc-400 mb-2">Name</label><input type="text" className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-colors" placeholder="Your name" /></div>
                       <div><label className="block text-sm text-zinc-400 mb-2">Phone</label><input type="tel" className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-colors" placeholder="Your phone" /></div>
