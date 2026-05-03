@@ -123,6 +123,26 @@ const pricingPackages = [
 
 const showcaseImages = [
   { 
+    src: "/images/showcase-corvette-blue.webp",
+    title: "Chevrolet Corvette",
+    description: "Premium ceramic tint on blue convertible"
+  },
+  { 
+    src: "/images/showcase-corvette-yellow.webp",
+    title: "Chevrolet Corvette C8",
+    description: "Full detail with ceramic coating protection"
+  },
+  { 
+    src: "/images/showcase-silverado.webp",
+    title: "Chevrolet Silverado",
+    description: "Window tinting on red pickup truck"
+  },
+  { 
+    src: "/images/showcase-silver-sedan.webp",
+    title: "Silver Sedan",
+    description: "Complete window tint package"
+  },
+  { 
     src: "/images/hero-skyline.webp",
     title: "Nissan Skyline R34",
     description: "Premium ceramic tint with color-shifting finish"
