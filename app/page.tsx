@@ -185,10 +185,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <motion.a href="#" className="flex items-center gap-3" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                <Car className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
-              </div>
-              <span className="text-lg sm:text-xl font-bold text-white tracking-tight">AUTO SPA <span className="text-blue-400">1</span></span>
+              <img src="/logo.png" alt="Auto Spa 1 Logo" className="h-12 sm:h-14 w-auto object-contain" />
             </motion.a>
             <div className="hidden md:flex items-center gap-8">
               {["Services", "Gallery", "Pricing", "Reviews", "Contact"].map((item) => (
@@ -612,8 +609,7 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-12 mb-8 sm:mb-12">
             <div className="col-span-2">
               <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center"><Car className="w-6 h-6 sm:w-7 sm:h-7 text-white" /></div>
-                <span className="text-xl sm:text-2xl font-bold text-white">AUTO SPA <span className="text-blue-400">1</span></span>
+                <img src="/logo.png" alt="Auto Spa 1 Logo" className="h-12 sm:h-14 w-auto object-contain" />
               </div>
               <p className="text-zinc-400 max-w-sm mb-4 sm:mb-6 text-sm sm:text-base">Premium window tinting and auto detailing services in Westland, MI. Transforming vehicles with expert care since 2019.</p>
             </div>

@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   title: "Auto Spa 1 | Premium Window Tinting & Auto Detailing | Westland, MI",
   description: "Auto Spa 1 offers premium window tinting, ceramic coating, paint protection, and auto detailing services in Westland, MI. Transform your vehicle with our expert care.",
   keywords: "auto detailing, window tinting, ceramic coating, paint protection, car detailing, Westland MI, Auto Spa 1",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
