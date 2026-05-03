@@ -100,7 +100,7 @@ const pricingPackages = [
     ],
     popular: false,
     color: "from-purple-500 to-pink-400",
-    image: "https://images.unsplash.com/photo-1507136566006-cfc505b114fc?w=800&q=80",
+    image: "/interior-detail.webp",
   },
   {
     name: "Complete Package",
