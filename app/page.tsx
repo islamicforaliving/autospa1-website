@@ -59,12 +59,9 @@ const realReviews = [
 ];
 
 const services = [
-  { icon: Sun, title: "Window Tinting", description: "Premium ceramic and carbon tint films that block UV rays, reduce heat, and enhance privacy while looking sleek.", price: "$199", features: ["UV Protection", "Heat Reduction", "Privacy Enhancement", "Lifetime Warranty"] },
+  { icon: Sun, title: "Window Tinting", description: "Premium ceramic and carbon tint films that block UV rays, reduce heat, and enhance privacy while looking sleek.", price: "", features: ["UV Protection", "Heat Reduction", "Privacy Enhancement", "Lifetime Warranty"] },
   { icon: Sparkles, title: "Ceramic Coating", description: "Long-lasting paint protection with hydrophobic technology. Your paint stays showroom-new with minimal maintenance.", price: "$799", features: ["7 Years of Protection", "Hydrophobic Finish", "Chemical Resistance", "Deep Gloss"] },
-  { icon: Shield, title: "Paint Protection Film", description: "Self-healing clear bra that protects against rock chips, scratches, and road debris. Invisible protection.", price: "$1,199", features: ["Self-Healing", "Rock Chip Protection", "Stain Resistant", "Invisible Finish"] },
-  { icon: Car, title: "Full Detail Package", description: "Complete interior and exterior restoration. Paint correction, leather treatment, and engine bay detailing.", price: "$349", features: ["Paint Correction", "Interior Deep Clean", "Engine Bay Detail", "Leather Treatment"] },
-  { icon: Droplets, title: "Interior Detailing", description: "Deep cleaning of carpets, seats, and surfaces. Leather conditioning and odor elimination included.", price: "$149", features: ["Steam Cleaning", "Odor Removal", "Stain Treatment", "UV Protection"] },
-  { icon: CheckCircle, title: "Windshield Repair", description: "Professional chip and crack repair to restore visibility and prevent further damage. Quick same-day service.", price: "$89", features: ["Same-Day Service", "Chip Repair", "Crack Repair", "Insurance Approved"] },
+  { icon: CheckCircle, title: "Windshield Repair", description: "Professional chip and crack repair to restore visibility and prevent further damage. Quick same-day service.", price: "", features: ["Same-Day Service", "Chip Repair", "Crack Repair", "Insurance Approved"] },
 ];
 
 const pricingPackages = [
@@ -212,7 +209,9 @@ export default function Home() {
                 {["Services", "Gallery", "Pricing", "Reviews", "Process", "Contact"].map((item) => (
                   <motion.button key={item} onClick={() => scrollToSection(item.toLowerCase())} className="block w-full text-left text-zinc-400 hover:text-white py-3 border-b border-white/5" whileHover={{ x: 10 }}>{item}</motion.button>
                 ))}
-                <Button onClick={() => scrollToSection("contact")} className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white mt-4">Get Quote</Button>
+                <a href="tel:734-352-9000" className="flex items-center justify-center w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white mt-4 py-3 rounded-lg font-semibold">
+                  <Phone className="w-4 h-4 mr-2" /> Call Now
+                </a>
               </div>
             </motion.div>
           )}
@@ -257,16 +256,16 @@ export default function Home() {
             </motion.div>
             
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mt-8 sm:mt-12 px-4 sm:px-0">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" onClick={() => scrollToSection("contact")} className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-semibold px-6 sm:px-10 py-5 sm:py-7 text-base sm:text-lg rounded-full w-full sm:w-auto">Get Free Quote<ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" /></Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" variant="outline" onClick={() => scrollToSection("gallery")} className="border-white/20 text-white hover:bg-white/10 font-semibold px-6 sm:px-10 py-5 sm:py-7 text-base sm:text-lg rounded-full w-full sm:w-auto">View Our Work</Button>
-              </motion.div>
+              <motion.a href="tel:734-352-9000" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-semibold px-6 sm:px-10 py-5 sm:py-7 text-base sm:text-lg rounded-full w-full sm:w-auto">
+                <Phone className="mr-2 w-5 h-5" /> Call Now
+              </motion.a>
+              <motion.a href="sms:734-352-9000" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex items-center justify-center border border-white/20 text-white hover:bg-white/10 font-semibold px-6 sm:px-10 py-5 sm:py-7 text-base sm:text-lg rounded-full w-full sm:w-auto">
+                Text Us
+              </motion.a>
             </motion.div>
             
             <motion.div variants={staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-8 max-w-4xl mx-auto mt-10 sm:mt-16 px-4 sm:px-0">
-              {[{ value: 157, suffix: "+", label: "5-Star Reviews" }, { value: 500, suffix: "+", label: "Vehicles Detailed" }, { value: 5, suffix: ".0", label: "Star Rating" }, { value: 6, suffix: "+", label: "Years Experience" }].map((stat, index) => (
+              {[{ value: 157, suffix: "+", label: "5-Star Reviews" }, { value: 500, suffix: "+", label: "Vehicles Detailed" }, { value: 5, suffix: ".0", label: "Star Rating" }, { value: 25, suffix: "+", label: "Years Experience" }].map((stat, index) => (
                 <motion.div key={index} variants={scaleIn} className="text-center p-3 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10" whileHover={!isMobile ? { y: -5, borderColor: "rgba(255,255,255,0.2)" } : {}}>
                   <div className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-1 sm:mb-2"><AnimatedCounter value={stat.value} suffix={stat.suffix} /></div>
                   <div className="text-xs sm:text-sm text-zinc-400">{stat.label}</div>
@@ -469,9 +468,14 @@ export default function Home() {
                         <Sparkles className="w-3 h-3" /> {pkg.note}
                       </p>
                     )}
-                    <Button onClick={() => scrollToSection("contact")} className={`w-full py-5 sm:py-6 rounded-full font-semibold text-sm sm:text-base ${pkg.popular ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}>
-                      Book {pkg.options[selectedOption[pkg.name]]?.name || pkg.name}
-                    </Button>
+                    <div className="grid grid-cols-2 gap-3">
+                      <a href="tel:734-352-9000" className={`flex items-center justify-center py-4 sm:py-5 rounded-full font-semibold text-sm sm:text-base ${pkg.popular ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white' : 'bg-white/10 text-white hover:bg-white/20'} transition-all`}>
+                        <Phone className="w-4 h-4 mr-2" /> Call Now
+                      </a>
+                      <a href="sms:734-352-9000" className={`flex items-center justify-center py-4 sm:py-5 rounded-full font-semibold text-sm sm:text-base border border-white/20 text-white hover:bg-white/10 transition-all`}>
+                        Text Now
+                      </a>
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -510,9 +514,13 @@ export default function Home() {
                         </li>
                       ))}
                     </ul>
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl sm:text-3xl font-bold text-white">{service.price}</span>
-                      <Button variant="outline" size="sm" onClick={() => scrollToSection("contact")} className="border-white/20 text-white hover:bg-white/10 text-xs sm:text-sm">Book Now</Button>
+                    <div className="grid grid-cols-2 gap-3">
+                      <a href="tel:734-352-9000" className="flex items-center justify-center py-3 px-4 rounded-lg font-semibold text-sm bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 border border-blue-500/30 transition-all">
+                        <Phone className="w-4 h-4 mr-2" /> Call
+                      </a>
+                      <a href="sms:734-352-9000" className="flex items-center justify-center py-3 px-4 rounded-lg font-semibold text-sm bg-white/10 text-white hover:bg-white/20 border border-white/20 transition-all">
+                        Text
+                      </a>
                     </div>
                   </CardContent>
                 </Card>
@@ -588,51 +596,37 @@ export default function Home() {
 
       <section id="contact" className="py-16 sm:py-32 bg-[#0d0d0d] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-16">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer}>
-              <motion.div variants={fadeInUp}><Badge className="mb-4 sm:mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm">Get In Touch</Badge></motion.div>
-              <motion.h2 variants={fadeInUp} className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">Ready to Transform Your Vehicle?</motion.h2>
-              <motion.p variants={fadeInUp} className="text-base sm:text-xl text-zinc-400 mb-8 sm:mb-12">Get a free quote or book your appointment today. Walk-ins welcome!</motion.p>
-              <motion.div variants={staggerContainer} className="space-y-4 sm:space-y-6">
-                {[
-                  { icon: MapPin, title: "Visit Us", content: "38505 Ford Rd, Westland, MI 48185" },
-                  { icon: Phone, title: "Call Us", content: "(734) 352-9000" },
-                  { icon: Clock, title: "Hours", content: "Mon-Sat: 9AM-6PM, Sun: Closed" },
-                ].map((item, index) => (
-                  <motion.div key={index} variants={fadeInUp} className="flex items-start gap-3 sm:gap-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white/5 flex items-center justify-center flex-shrink-0">
-                      <item.icon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
-                    </div>
-                    <div>
-                      <h4 className="text-white font-semibold mb-0.5 sm:mb-1 text-sm sm:text-base">{item.title}</h4>
-                      <p className="text-zinc-400 text-xs sm:text-sm">{item.content}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="text-center">
+            <motion.div variants={fadeInUp}><Badge className="mb-4 sm:mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm">Get In Touch</Badge></motion.div>
+            <motion.h2 variants={fadeInUp} className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">Ready to Transform Your Vehicle?</motion.h2>
+            <motion.p variants={fadeInUp} className="text-base sm:text-xl text-zinc-400 mb-8 sm:mb-12">Get a free quote or book your appointment today. Walk-ins welcome!</motion.p>
+            <motion.div variants={staggerContainer} className="space-y-4 sm:space-y-6 mb-10 sm:mb-12">
+              {[
+                { icon: MapPin, title: "Visit Us", content: "38505 Ford Rd, Westland, MI 48185" },
+                { icon: Phone, title: "Call Us", content: "(734) 352-9000" },
+                { icon: Clock, title: "Hours", content: "Mon-Sat: 9AM-6PM, Sun: Closed" },
+              ].map((item, index) => (
+                <motion.div key={index} variants={fadeInUp} className="flex items-center justify-center gap-3 sm:gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white/5 flex items-center justify-center flex-shrink-0">
+                    <item.icon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="text-white font-semibold mb-0.5 sm:mb-1 text-sm sm:text-base">{item.title}</h4>
+                    <p className="text-zinc-400 text-xs sm:text-sm">{item.content}</p>
+                  </div>
+                </motion.div>
+              ))}
             </motion.div>
-            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-              <Card className="bg-white/5 border-white/10">
-                <CardContent className="p-5 sm:p-8">
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white mb-4 sm:mb-6">Send Us a Message</h3>
-                  <form className="space-y-4 sm:space-y-6" action="https://formspree.io/f/autospawestland@gmail.com" method="POST">
-                    <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
-                      <div><label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">Name</label><input type="text" name="name" required className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-colors text-sm" placeholder="Your name" /></div>
-                      <div><label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">Phone</label><input type="tel" name="phone" required className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-colors text-sm" placeholder="Your phone" /></div>
-                    </div>
-                    <div><label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">Email</label><input type="email" name="email" className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-colors text-sm" placeholder="Your email (optional)" /></div>
-                    <div><label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">Service</label><select name="service" className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500/50 transition-colors text-sm"><option value="" className="bg-[#141414]">Select a service</option><option value="tinting" className="bg-[#141414]">Window Tinting</option><option value="ceramic" className="bg-[#141414]">Ceramic Coating</option><option value="ppf" className="bg-[#141414]">Paint Protection Film</option><option value="detail" className="bg-[#141414]">Full Detail Package</option><option value="interior" className="bg-[#141414]">Interior Detailing</option><option value="windshield" className="bg-[#141414]">Windshield Repair</option></select></div>
-                    <div><label className="block text-xs sm:text-sm text-zinc-400 mb-1.5 sm:mb-2">Message</label><textarea name="message" rows={4} className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 transition-colors resize-none text-sm" placeholder="Tell us about your vehicle..."></textarea></div>
-                    <input type="text" name="_gotcha" style={{display: 'none'}} />
-                    <input type="hidden" name="_subject" value="New Contact Form Submission - Auto Spa 1" />
-                    <input type="hidden" name="_next" value="https://autospa1.net/?submitted=true" />
-                    <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-semibold py-5 sm:py-6 rounded-full text-sm sm:text-base">Send Message</Button>
-                  </form>
-                </CardContent>
-              </Card>
+            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="tel:734-352-9000" className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-semibold py-5 sm:py-6 px-8 sm:px-12 rounded-full text-base sm:text-lg transition-all">
+                <Phone className="w-5 h-5 sm:w-6 sm:h-6" /> Call Now
+              </a>
+              <a href="sms:734-352-9000" className="flex items-center justify-center gap-2 bg-white/10 text-white hover:bg-white/20 font-semibold py-5 sm:py-6 px-8 sm:px-12 rounded-full text-base sm:text-lg border border-white/20 transition-all">
+                Text Us
+              </a>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -648,7 +642,7 @@ export default function Home() {
             <div>
               <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Services</h4>
               <ul className="space-y-2 sm:space-y-3">
-                {["Window Tinting", "Ceramic Coating", "Paint Protection", "Auto Detailing", "Windshield Repair"].map((service) => (
+                {["Window Tinting", "Ceramic Coating", "Auto Detailing", "Windshield Repair"].map((service) => (
                   <li key={service}><button onClick={() => scrollToSection("services")} className="text-zinc-400 hover:text-white transition-colors text-xs sm:text-sm">{service}</button></li>
                 ))}
               </ul>
