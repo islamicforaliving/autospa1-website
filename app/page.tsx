@@ -60,7 +60,7 @@ const realReviews = [
 
 const services = [
   { icon: Sun, title: "Window Tinting", description: "Premium ceramic and carbon tint films that block UV rays, reduce heat, and enhance privacy while looking sleek.", price: "$199", features: ["UV Protection", "Heat Reduction", "Privacy Enhancement", "Lifetime Warranty"] },
-  { icon: Sparkles, title: "Ceramic Coating", description: "Long-lasting paint protection with hydrophobic technology. Your paint stays showroom-new with minimal maintenance.", price: "$799", features: ["5-Year Protection", "Hydrophobic Finish", "Chemical Resistance", "Deep Gloss"] },
+  { icon: Sparkles, title: "Ceramic Coating", description: "Long-lasting paint protection with hydrophobic technology. Your paint stays showroom-new with minimal maintenance.", price: "$799", features: ["7 Years of Protection", "Hydrophobic Finish", "Chemical Resistance", "Deep Gloss"] },
   { icon: Shield, title: "Paint Protection Film", description: "Self-healing clear bra that protects against rock chips, scratches, and road debris. Invisible protection.", price: "$1,199", features: ["Self-Healing", "Rock Chip Protection", "Stain Resistant", "Invisible Finish"] },
   { icon: Car, title: "Full Detail Package", description: "Complete interior and exterior restoration. Paint correction, leather treatment, and engine bay detailing.", price: "$349", features: ["Paint Correction", "Interior Deep Clean", "Engine Bay Detail", "Leather Treatment"] },
   { icon: Droplets, title: "Interior Detailing", description: "Deep cleaning of carpets, seats, and surfaces. Leather conditioning and odor elimination included.", price: "$149", features: ["Steam Cleaning", "Odor Removal", "Stain Treatment", "UV Protection"] },
@@ -71,32 +71,37 @@ const pricingPackages = [
   {
     name: "Exterior Package",
     description: "Complete exterior detailing and protection",
-    features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Door Jambs", "Windows", "All Chrome", "Gas Door", "Add Paint Sealant"],
+    features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Windows", "All Chrome", "Gas Door", "Add Paint Sealant"],
     note: "Black & White Vehicles $20 extra",
     prices: [
       { vehicle: "Car", price: 160 },
-      { vehicle: "Pick Up", price: 200 },
-      { vehicle: "Small SUV", price: 190 },
-      { vehicle: "SUV & Minivan", price: 200 },
-      { vehicle: "Large SUV", price: 220 },
-      { vehicle: "Conversion Van", price: 220 },
+      { vehicle: "Minivan", price: 200 },
     ],
     popular: false,
     color: "from-blue-500 to-cyan-400",
     image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
   },
   {
-    name: "Interior Package",
-    description: "Deep interior cleaning and restoration",
-    features: ["Vacuum & Shampoo", "Leather Treatment", "Dashboard & Console", "Door Panels", "Odor Elimination", "Stain Removal", "Floor Mats", "Headliner Cleaning"],
+    name: "Exterior Wax Only",
+    description: "Exterior wax protection only",
+    features: ["Exterior Wash", "Hand Wax Application", "Tire Shine", "Window Cleaning"],
     note: "",
     prices: [
-      { vehicle: "Car", price: 140 },
-      { vehicle: "Pick Up", price: 170 },
-      { vehicle: "Small SUV", price: 160 },
-      { vehicle: "SUV & Minivan", price: 180 },
-      { vehicle: "Large SUV", price: 200 },
-      { vehicle: "Conversion Van", price: 200 },
+      { vehicle: "Car", price: 100 },
+      { vehicle: "Minivan", price: 150 },
+    ],
+    popular: false,
+    color: "from-cyan-500 to-blue-400",
+    image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
+  },
+  {
+    name: "Interior Package",
+    description: "Deep interior cleaning and restoration",
+    features: ["Vacuum & Shampoo", "Leather Treatment", "Dashboard & Console", "Door Panels", "Door Jambs", "Odor Elimination", "Stain Removal", "Floor Mats", "Headliner Cleaning"],
+    note: "Pet Hair Removal +$20",
+    prices: [
+      { vehicle: "Car", price: 150 },
+      { vehicle: "Minivan", price: 170 },
     ],
     popular: false,
     color: "from-purple-500 to-pink-400",
@@ -104,20 +109,55 @@ const pricingPackages = [
   },
   {
     name: "Complete Package",
-    description: "The ultimate full-service detail",
-    features: ["Interior Package", "Exterior Package", "Paint Sealant Included", "Full Protection"],
-    note: "Best Value - Save $40+",
+    description: "Interior + Exterior detailing combined",
+    features: ["Interior Package", "Exterior Package", "Door Jambs", "Full Protection"],
+    note: "Best Value",
     prices: [
-      { vehicle: "Car", price: 280 },
-      { vehicle: "Pick Up", price: 350 },
-      { vehicle: "Small SUV", price: 330 },
-      { vehicle: "SUV & Minivan", price: 360 },
-      { vehicle: "Large SUV", price: 400 },
-      { vehicle: "Conversion Van", price: 400 },
+      { vehicle: "Car", price: 200 },
+      { vehicle: "Minivan", price: 240 },
     ],
     popular: true,
     color: "from-amber-500 to-orange-400",
     image: "https://images.unsplash.com/photo-1551522435-a13afa10f103?w=800&q=80",
+  },
+  {
+    name: "Complete Package + Wax",
+    description: "Complete package with premium wax finish",
+    features: ["Interior Package", "Exterior Package", "Premium Wax", "Door Jambs", "Full Protection"],
+    note: "",
+    prices: [
+      { vehicle: "Car", price: 250 },
+      { vehicle: "Minivan", price: 290 },
+    ],
+    popular: false,
+    color: "from-orange-500 to-red-400",
+    image: "https://images.unsplash.com/photo-1551522435-a13afa10f103?w=800&q=80",
+  },
+  {
+    name: "Buff & Wax + Complete",
+    description: "Complete package with buff and wax",
+    features: ["Interior Package", "Exterior Package", "Paint Buffing", "Premium Wax", "Door Jambs", "Full Protection"],
+    note: "Ultimate Protection",
+    prices: [
+      { vehicle: "Car", price: 350 },
+      { vehicle: "Minivan", price: 390 },
+    ],
+    popular: false,
+    color: "from-red-500 to-rose-400",
+    image: "https://images.unsplash.com/photo-1551522435-a13afa10f103?w=800&q=80",
+  },
+  {
+    name: "Buff & Wax (Exterior Only)",
+    description: "Exterior buff and wax without interior",
+    features: ["Exterior Wash", "Paint Buffing", "Premium Wax", "Tire Shine", "Window Cleaning"],
+    note: "No Interior Service",
+    prices: [
+      { vehicle: "Car", price: 300 },
+      { vehicle: "Minivan", price: 340 },
+    ],
+    popular: false,
+    color: "from-emerald-500 to-teal-400",
+    image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
   },
 ];
 
@@ -158,8 +198,12 @@ export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<{[key: string]: string}>({
     "Exterior Package": "Car",
-    "Interior Package": "Car", 
-    "Complete Package": "Car"
+    "Exterior Wax Only": "Car",
+    "Interior Package": "Car",
+    "Complete Package": "Car",
+    "Complete Package + Wax": "Car",
+    "Buff & Wax + Complete": "Car",
+    "Buff & Wax (Exterior Only)": "Car"
   });
   const [currentGalleryIndex, setCurrentGalleryIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
