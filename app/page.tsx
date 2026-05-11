@@ -105,36 +105,18 @@ const pricingPackages = [
 ];
 
 const showcaseImages = [
-  { 
-    src: "/images/showcase-corvette-blue.webp",
-    title: "Chevrolet Corvette",
-    description: "Premium ceramic tint on blue convertible"
-  },
-  { 
-    src: "/images/showcase-silverado.webp",
-    title: "Chevrolet Silverado",
-    description: "Window tinting on red pickup truck"
-  },
-  { 
-    src: "/images/hero-skyline.webp",
-    title: "Nissan Skyline R34",
-    description: "Premium ceramic tint with color-shifting finish"
-  },
-  { 
-    src: "/images/showcase-1.webp",
-    title: "Premium Window Tinting",
-    description: "Ceramic tint installation on Cadillac CT4-V"
-  },
-  { 
-    src: "/images/showcase-2.webp",
-    title: "Professional Detailing",
-    description: "Complete exterior detail with showroom shine"
-  },
-  { 
-    src: "/images/showcase-3.webp",
-    title: "Interior Restoration",
-    description: "Leather treatment and deep cleaning"
-  },
+  { src: "/images/showcase-corvette-blue.webp", title: "Chevrolet Corvette", description: "Premium ceramic tint on blue convertible" },
+  { src: "/images/showcase-silverado.webp", title: "Chevrolet Silverado", description: "Window tinting on red pickup truck" },
+  { src: "/images/hero-skyline.webp", title: "Nissan Skyline R34", description: "Premium ceramic tint with color-shifting finish" },
+  { src: "/images/showcase-1.webp", title: "Premium Window Tinting", description: "Ceramic tint installation on Cadillac CT4-V" },
+  { src: "/images/showcase-2.webp", title: "Professional Detailing", description: "Complete exterior detail with showroom shine" },
+  { src: "/images/showcase-3.webp", title: "Interior Restoration", description: "Leather treatment and deep cleaning" },
+  { src: "/images/IMG_1087.jpg", title: "Customer Vehicle", description: "Premium detailing result" },
+  { src: "/images/IMG_1170.jpg", title: "Customer Vehicle", description: "Expert tint installation" },
+  { src: "/images/IMG_1544.jpg", title: "Customer Vehicle", description: "Showroom quality finish" },
+  { src: "/images/IMG_1584.jpg", title: "Customer Vehicle", description: "Professional ceramic coating" },
+  { src: "/images/IMG_2357.jpg", title: "Customer Vehicle", description: "Complete detail transformation" },
+  { src: "/images/IMG_4009.jpg", title: "Customer Vehicle", description: "Premium auto spa treatment" },
 ];
 
 export default function Home() {
@@ -149,8 +131,7 @@ export default function Home() {
     "Interior Only": 0,
     "Complete Packages": 0
   });
-  const [currentGalleryIndex, setCurrentGalleryIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const galleryScrollRef = useRef<HTMLDivElement>(null);
   const [selectedImage, setSelectedImage] = useState<{before: string, after: string, title: string} | null>(null);
   const isMobile = useIsMobile();
   
@@ -164,13 +145,7 @@ export default function Home() {
     if (element) { element.scrollIntoView({ behavior: "smooth" }); setIsMenuOpen(false); }
   };
 
-  useEffect(() => {
-    if (!isAutoPlaying) return;
-    const interval = setInterval(() => {
-      setCurrentGalleryIndex((prev) => (prev + 1) % showcaseImages.length);
-    }, isMobile ? 5000 : 4000);
-    return () => clearInterval(interval);
-  }, [isAutoPlaying, isMobile]);
+
 
   const getPrice = (pkg: typeof pricingPackages[0], vehicleType: string, optionIndex: number) => {
     const option = pkg.options[optionIndex];
@@ -282,88 +257,65 @@ export default function Home() {
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer} className="text-center mb-10 sm:mb-16">
             <motion.div variants={fadeInUp}><Badge className="mb-4 sm:mb-6 bg-purple-500/10 text-purple-400 border-purple-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm"><Camera className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />Our Work</Badge></motion.div>
             <motion.h2 variants={fadeInUp} className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">Showcase</motion.h2>
-            <motion.p variants={fadeInUp} className="text-base sm:text-xl text-zinc-400 max-w-2xl mx-auto px-4 sm:px-0">Real vehicles, real results. See the Auto Spa 1 difference.</motion.p>
+            <motion.p variants={fadeInUp} className="text-base sm:text-xl text-zinc-400 max-w-2xl mx-auto px-4 sm:px-0">Real vehicles, real results. Scroll to see more of our work.</motion.p>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative mb-8 sm:mb-12">
-            <div className="relative aspect-[4/3] sm:aspect-video max-w-5xl mx-auto rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 shadow-xl sm:shadow-2xl shadow-purple-500/10">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentGalleryIndex}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="absolute inset-0"
-                >
-                  <div className="relative w-full h-full group">
-                    <img 
-                      src={showcaseImages[currentGalleryIndex].src} 
-                      alt={showcaseImages[currentGalleryIndex].title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                    <motion.div 
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
-                      className="absolute bottom-0 left-0 right-0 p-4 sm:p-8"
-                    >
-                      <h3 className="text-xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">{showcaseImages[currentGalleryIndex].title}</h3>
-                      <p className="text-zinc-300 text-sm sm:text-lg">{showcaseImages[currentGalleryIndex].description}</p>
-                    </motion.div>
-                    {!isMobile && (
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <motion.div 
-                          whileHover={{ scale: 1.1 }}
-                          className="bg-white/20 backdrop-blur-md p-3 sm:p-4 rounded-full cursor-pointer"
-                          onClick={() => setSelectedImage({
-                            before: showcaseImages[currentGalleryIndex].src,
-                            after: showcaseImages[currentGalleryIndex].src,
-                            title: showcaseImages[currentGalleryIndex].title
-                          })}
-                        >
-                          <ZoomIn className="w-5 h-5 sm:w-8 sm:h-8 text-white" />
-                        </motion.div>
-                      </div>
-                    )}
+          {/* Horizontal Scrolling Grid */}
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            whileInView={{ opacity: 1 }} 
+            viewport={{ once: true }} 
+            className="relative"
+          >
+            {/* Scroll Container */}
+            <div className="overflow-x-auto pb-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              <div className="flex gap-4 sm:gap-6 w-max px-4 sm:px-0">
+                {/* 3x3 Grid Rows */}
+                {[0, 1, 2, 3].map((rowIndex) => (
+                  <div key={rowIndex} className="flex flex-col gap-4 sm:gap-6">
+                    {showcaseImages.slice(rowIndex * 3, rowIndex * 3 + 3).map((image, imgIndex) => (
+                      <motion.div
+                        key={imgIndex}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: imgIndex * 0.1 }}
+                        whileHover={{ scale: 1.02 }}
+                        className="group relative w-64 sm:w-80 h-48 sm:h-60 rounded-xl overflow-hidden cursor-pointer bg-zinc-900 shadow-lg shadow-purple-500/5"
+                        onClick={() => setSelectedImage({
+                          before: image.src,
+                          after: image.src,
+                          title: image.title
+                        })}
+                      >
+                        <img 
+                          src={image.src} 
+                          alt={image.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                          <h3 className="text-white font-semibold text-sm sm:text-base">{image.title}</h3>
+                          <p className="text-zinc-300 text-xs sm:text-sm">{image.description}</p>
+                        </div>
+                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="bg-white/20 backdrop-blur-md p-2 rounded-full">
+                            <ZoomIn className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
                   </div>
-                </motion.div>
-              </AnimatePresence>
-              
-              <button 
-                onClick={() => setCurrentGalleryIndex((prev) => (prev - 1 + showcaseImages.length) % showcaseImages.length)}
-                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 sm:p-3 rounded-full backdrop-blur-sm transition-all"
-              >
-                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-              </button>
-              <button 
-                onClick={() => setCurrentGalleryIndex((prev) => (prev + 1) % showcaseImages.length)}
-                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 sm:p-3 rounded-full backdrop-blur-sm transition-all"
-              >
-                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-              </button>
-              <button 
-                onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-                className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-black/50 hover:bg-black/70 text-white p-1.5 sm:p-2 rounded-full backdrop-blur-sm transition-all"
-              >
-                {isAutoPlaying ? <Pause className="w-4 h-4 sm:w-5 sm:h-5" /> : <Play className="w-4 h-4 sm:w-5 sm:h-5" />}
-              </button>
+                ))}
+              </div>
             </div>
-
-            <div className="flex justify-center gap-2 sm:gap-3 mt-4 sm:mt-8 px-4">
-              {showcaseImages.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentGalleryIndex(index)}
-                  className={`relative w-14 h-10 sm:w-20 sm:h-14 rounded-lg overflow-hidden transition-all duration-300 ${
-                    index === currentGalleryIndex ? 'ring-2 ring-purple-500 scale-105' : 'opacity-50 hover:opacity-80'
-                  }`}
-                >
-                  <img src={image.src} alt={image.title} className="w-full h-full object-cover" loading="lazy" />
-                </button>
-              ))}
+            
+            {/* Scroll Hint */}
+            <div className="flex items-center justify-center gap-2 mt-6 text-zinc-500">
+              <ChevronLeft className="w-4 h-4 animate-pulse" />
+              <span className="text-xs sm:text-sm">Scroll to see more</span>
+              <ChevronRight className="w-4 h-4 animate-pulse" />
             </div>
           </motion.div>
         </div>
