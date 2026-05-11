@@ -269,6 +269,18 @@ export default function Home() {
             className="relative"
           >
             <div className="relative flex items-center">
+              {/* Desktop Left Scroll Button */}
+              <button
+                onClick={() => {
+                  if (galleryScrollRef.current) {
+                    galleryScrollRef.current.scrollBy({ left: -400, behavior: 'smooth' });
+                  }
+                }}
+                className="hidden lg:flex items-center justify-center w-12 h-12 mr-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full transition-all duration-300 flex-shrink-0"
+              >
+                <ChevronLeft className="w-6 h-6 text-white" />
+              </button>
+              
               {/* Scroll Container */}
               <div 
                 ref={galleryScrollRef}
@@ -325,7 +337,7 @@ export default function Home() {
                 </div>
               </div>
               
-              {/* Desktop Scroll Button */}
+              {/* Desktop Right Scroll Button */}
               <button
                 onClick={() => {
                   if (galleryScrollRef.current) {
