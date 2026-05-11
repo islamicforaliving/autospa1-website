@@ -71,7 +71,7 @@ const pricingPackages = [
     options: [
       { name: "Complete Basic", priceCar: 200, priceMinivan: 240, features: ["Full Interior Detail", "Full Exterior Detail", "Door Jambs"] },
       { name: "Complete + Wax", priceCar: 250, priceMinivan: 290, features: ["Full Interior Detail", "Full Exterior Detail", "Premium Wax", "Door Jambs"] },
-      { name: "Complete + Buff & Wax", priceCar: 350, priceMinivan: 390, features: ["Full Interior Detail", "Full Exterior Detail", "Paint Buffing", "Premium Wax", "Door Jambs"] },
+      { name: "Complete + Buff & Wax", priceCar: 450, priceMinivan: 490, features: ["Full Interior Detail", "Full Exterior Detail", "Paint Buffing", "Premium Wax", "Door Jambs"] },
     ],
     note: "Best Value",
     popular: true,
@@ -82,11 +82,10 @@ const pricingPackages = [
     name: "Exterior",
     description: "Exterior detailing packages",
     options: [
-      { name: "Basic Exterior", priceCar: 160, priceMinivan: 200, features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Windows", "All Chrome", "Gas Door"] },
-      { name: "Wax", priceCar: 100, priceMinivan: 150, features: ["Exterior Wash", "Hand Wax", "Tire Shine", "Windows"] },
+      { name: "Wax", priceCar: 150, priceMinivan: 190, features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Windows", "All Chrome", "Gas Door", "Hand Wax", "Tire Shine"] },
       { name: "Buff & Wax", priceCar: 300, priceMinivan: 340, features: ["Exterior Wash", "Paint Buffing", "Premium Wax", "Tire Shine", "Windows"] },
     ],
-    note: "Black & White Vehicles +$20",
+    note: "",
     popular: false,
     color: "from-blue-500 to-cyan-400",
     image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
