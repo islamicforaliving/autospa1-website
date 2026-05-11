@@ -105,18 +105,18 @@ const pricingPackages = [
 ];
 
 const showcaseImages = [
-  { src: "/images/showcase-corvette-blue.webp", title: "Chevrolet Corvette", description: "Premium ceramic tint on blue convertible" },
-  { src: "/images/showcase-silverado.webp", title: "Chevrolet Silverado", description: "Window tinting on red pickup truck" },
-  { src: "/images/hero-skyline.webp", title: "Nissan Skyline R34", description: "Premium ceramic tint with color-shifting finish" },
-  { src: "/images/showcase-1.webp", title: "Premium Window Tinting", description: "Ceramic tint installation on Cadillac CT4-V" },
-  { src: "/images/showcase-2.webp", title: "Professional Detailing", description: "Complete exterior detail with showroom shine" },
-  { src: "/images/showcase-3.webp", title: "Interior Restoration", description: "Leather treatment and deep cleaning" },
-  { src: "/images/IMG_1087.jpg", title: "Customer Vehicle", description: "Premium detailing result" },
-  { src: "/images/IMG_1170.jpg", title: "Customer Vehicle", description: "Expert tint installation" },
-  { src: "/images/IMG_1544.jpg", title: "Customer Vehicle", description: "Showroom quality finish" },
-  { src: "/images/IMG_1584.jpg", title: "Customer Vehicle", description: "Professional ceramic coating" },
-  { src: "/images/IMG_2357.jpg", title: "Customer Vehicle", description: "Complete detail transformation" },
-  { src: "/images/IMG_4009.jpg", title: "Customer Vehicle", description: "Premium auto spa treatment" },
+  { src: "/images/showcase-corvette-blue.webp", title: "Chevrolet Corvette", description: "", showText: true },
+  { src: "/images/showcase-silverado.webp", title: "Chevrolet Silverado", description: "", showText: true },
+  { src: "/images/hero-skyline.webp", title: "Nissan Skyline R34", description: "", showText: true },
+  { src: "/images/showcase-1.webp", title: "", description: "", showText: false },
+  { src: "/images/showcase-2.webp", title: "", description: "", showText: false },
+  { src: "/images/showcase-3.webp", title: "", description: "", showText: false },
+  { src: "/images/IMG_1087.jpg", title: "", description: "", showText: false },
+  { src: "/images/IMG_1170.jpg", title: "", description: "", showText: false },
+  { src: "/images/IMG_1544.jpg", title: "", description: "", showText: false },
+  { src: "/images/IMG_1584.jpg", title: "", description: "", showText: false },
+  { src: "/images/IMG_2357.jpg", title: "", description: "", showText: false },
+  { src: "/images/IMG_4009.jpg", title: "", description: "", showText: false },
 ];
 
 export default function Home() {
@@ -268,7 +268,16 @@ export default function Home() {
             className="relative"
           >
             {/* Scroll Container */}
-            <div className="overflow-x-auto pb-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            <div 
+              ref={galleryScrollRef}
+              className="overflow-x-auto pb-4 scroll-smooth" 
+              style={{ 
+                scrollbarWidth: 'none', 
+                msOverflowStyle: 'none',
+                WebkitOverflowScrolling: 'touch',
+                scrollBehavior: 'smooth'
+              }}
+            >
               <div className="flex gap-4 sm:gap-6 w-max px-4 sm:px-0">
                 {/* 3x3 Grid Rows */}
                 {[0, 1, 2, 3].map((rowIndex) => (
@@ -276,29 +285,32 @@ export default function Home() {
                     {showcaseImages.slice(rowIndex * 3, rowIndex * 3 + 3).map((image, imgIndex) => (
                       <motion.div
                         key={imgIndex}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        transition={{ delay: imgIndex * 0.1 }}
-                        whileHover={{ scale: 1.02 }}
+                        transition={{ delay: imgIndex * 0.05, duration: 0.3 }}
+                        whileHover={{ scale: 1.03 }}
                         className="group relative w-64 sm:w-80 h-48 sm:h-60 rounded-xl overflow-hidden cursor-pointer bg-zinc-900 shadow-lg shadow-purple-500/5"
                         onClick={() => setSelectedImage({
                           before: image.src,
                           after: image.src,
-                          title: image.title
+                          title: image.title || 'Our Work'
                         })}
                       >
                         <img 
                           src={image.src} 
-                          alt={image.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          alt={image.title || 'Auto Spa 1 Work'}
+                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                           loading="lazy"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                          <h3 className="text-white font-semibold text-sm sm:text-base">{image.title}</h3>
-                          <p className="text-zinc-300 text-xs sm:text-sm">{image.description}</p>
-                        </div>
+                        {image.showText && (
+                          <>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                              <h3 className="text-white font-semibold text-sm sm:text-base">{image.title}</h3>
+                            </div>
+                          </>
+                        )}
                         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                           <div className="bg-white/20 backdrop-blur-md p-2 rounded-full">
                             <ZoomIn className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
