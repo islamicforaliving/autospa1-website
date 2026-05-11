@@ -60,7 +60,7 @@ const realReviews = [
 
 const services = [
   { icon: Sun, title: "Window Tinting", description: "Premium ceramic and carbon tint films that block UV rays, reduce heat, and enhance privacy while looking sleek.", price: "", features: ["UV Protection", "Heat Reduction", "Privacy Enhancement", "Lifetime Warranty"] },
-  { icon: Sparkles, title: "Ceramic Coating", description: "Long-lasting paint protection with hydrophobic technology. Your paint stays showroom-new with minimal maintenance.", price: "$799", features: ["7 Years of Protection", "Hydrophobic Finish", "Chemical Resistance", "Deep Gloss"] },
+  { icon: Sparkles, title: "Ceramic Coating", description: "Long-lasting paint protection with hydrophobic technology. Your paint stays showroom-new with minimal maintenance.", price: "Starting at $799", features: ["7+ Years of Protection", "Hydrophobic Finish", "Chemical Resistance", "Deep Gloss"] },
   { icon: CheckCircle, title: "Windshield Repair", description: "Professional chip and crack repair to restore visibility and prevent further damage. Quick same-day service.", price: "", features: ["Same-Day Service", "Chip Repair", "Crack Repair", "Insurance Approved"] },
 ];
 
