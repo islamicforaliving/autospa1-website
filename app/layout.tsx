@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import PasswordGate from "./components/PasswordGate";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -26,9 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} antialiased`}>
       <body className="min-h-screen bg-background text-foreground">
-        <PasswordGate>
-          {children}
-        </PasswordGate>
+        {children}
       </body>
     </html>
   );
