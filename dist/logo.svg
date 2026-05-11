@@ -1,95 +1,75 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 140">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80">
   <defs>
     <!-- 3D shadow effect -->
     <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="3" dy="4" stdDeviation="3" flood-color="#000" flood-opacity="0.5"/>
+      <feDropShadow dx="2" dy="3" stdDeviation="2" flood-color="#000" flood-opacity="0.6"/>
     </filter>
     
     <!-- Metallic red gradient -->
     <linearGradient id="redMetallic" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#ff5555;stop-opacity:1" />
-      <stop offset="30%" style="stop-color:#e60000;stop-opacity:1" />
-      <stop offset="60%" style="stop-color:#cc0000;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#990000;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#ff4444;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#dd0000;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#aa0000;stop-opacity:1" />
     </linearGradient>
     
-    <!-- Chrome highlight -->
-    <linearGradient id="chrome" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
-      <stop offset="50%" style="stop-color:#ffffff;stop-opacity:0" />
-      <stop offset="100%" style="stop-color:#000000;stop-opacity:0.3" />
-    </linearGradient>
-    
-    <!-- Dark background gradient -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#2a2a3e;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    <!-- Subtle shine -->
+    <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.6" />
+      <stop offset="45%" style="stop-color:#ffffff;stop-opacity:0" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0.2" />
     </linearGradient>
   </defs>
   
-  <!-- Background badge/shape -->
-  <path d="M 30 25 L 470 25 L 485 50 L 470 115 L 250 130 L 30 115 L 15 50 Z" 
-        fill="url(#bgGrad)" 
-        stroke="#444" 
-        stroke-width="2"
-        filter="url(#shadow)"/>
-  
-  <!-- Inner border -->
-  <path d="M 40 35 L 460 35 L 472 55 L 460 105 L 250 118 L 40 105 L 28 55 Z" 
-        fill="none" 
-        stroke="#666" 
-        stroke-width="1.5"/>
-  
   <!-- AUTO text -->
-  <text x="130" y="85" 
-        font-family="Impact, Arial Black, sans-serif" 
-        font-size="52" 
+  <text x="85" y="58" 
+        font-family="Arial Black, Helvetica Neue, sans-serif" 
+        font-size="46" 
         font-weight="900"
         text-anchor="middle" 
         fill="url(#redMetallic)"
         filter="url(#shadow)"
-        style="letter-spacing: 3px;">AUTO</text>
+        style="letter-spacing: 2px;">AUTO</text>
   
   <!-- SPA text -->
-  <text x="280" y="85" 
-        font-family="Impact, Arial Black, sans-serif" 
-        font-size="52" 
+  <text x="210" y="58" 
+        font-family="Arial Black, Helvetica Neue, sans-serif" 
+        font-size="46" 
         font-weight="900"
         text-anchor="middle" 
         fill="url(#redMetallic)"
         filter="url(#shadow)"
-        style="letter-spacing: 3px;">SPA</text>
+        style="letter-spacing: 2px;">SPA</text>
   
   <!-- 1 with special styling -->
-  <text x="395" y="88" 
-        font-family="Impact, Arial Black, sans-serif" 
-        font-size="58" 
+  <text x="295" y="60" 
+        font-family="Arial Black, Helvetica Neue, sans-serif" 
+        font-size="50" 
         font-weight="900"
         text-anchor="middle" 
         fill="url(#redMetallic)"
         filter="url(#shadow)">1</text>
   
-  <!-- Chrome shine overlay on text -->
-  <text x="130" y="85" 
-        font-family="Impact, Arial Black, sans-serif" 
-        font-size="52" 
+  <!-- Shine overlay -->
+  <text x="85" y="58" 
+        font-family="Arial Black, Helvetica Neue, sans-serif" 
+        font-size="46" 
         font-weight="900"
         text-anchor="middle" 
-        fill="url(#chrome)"
-        style="letter-spacing: 3px;">AUTO</text>
+        fill="url(#shine)"
+        style="letter-spacing: 2px;">AUTO</text>
   
-  <text x="280" y="85" 
-        font-family="Impact, Arial Black, sans-serif" 
-        font-size="52" 
+  <text x="210" y="58" 
+        font-family="Arial Black, Helvetica Neue, sans-serif" 
+        font-size="46" 
         font-weight="900"
         text-anchor="middle" 
-        fill="url(#chrome)"
-        style="letter-spacing: 3px;">SPA</text>
+        fill="url(#shine)"
+        style="letter-spacing: 2px;">SPA</text>
   
-  <text x="395" y="88" 
-        font-family="Impact, Arial Black, sans-serif" 
-        font-size="58" 
+  <text x="295" y="60" 
+        font-family="Arial Black, Helvetica Neue, sans-serif" 
+        font-size="50" 
         font-weight="900"
         text-anchor="middle" 
-        fill="url(#chrome)">1</text>
+        fill="url(#shine)">1</text>
 </svg>
