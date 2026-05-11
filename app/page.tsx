@@ -117,6 +117,7 @@ const showcaseImages = [
   { src: "/images/IMG_1584.jpg", title: "", description: "", showText: false },
   { src: "/images/IMG_2357.jpg", title: "", description: "", showText: false },
   { src: "/images/showcase-2.webp", title: "", description: "", showText: false },
+  { src: "/images/IMG_2418.jpg", title: "", description: "", showText: false },
 ];
 
 export default function Home() {
