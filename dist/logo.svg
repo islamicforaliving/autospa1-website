@@ -1,29 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80">
-  <defs>
-    <!-- White glow for visibility on dark backgrounds -->
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
-    
-    <!-- Bright red gradient -->
-    <linearGradient id="brightRed" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#ff5555;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#ff0000;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#cc0000;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  
-  <!-- AUTO text with white stroke for contrast -->
+  <!-- AUTO text - pure bright red -->
   <text x="75" y="58" 
         font-family="Arial Black, Impact, sans-serif" 
         font-size="46" 
         font-weight="900"
         text-anchor="middle" 
-        fill="url(#brightRed)"
-        stroke="#ffffff"
-        stroke-width="0.5"
-        style="letter-spacing: 2px;">AUTO</text>
+        fill="#ff2222"
+        style="letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,34,34,0.5);">AUTO</text>
   
   <!-- SPA text -->
   <text x="220" y="58" 
@@ -31,10 +14,8 @@
         font-size="46" 
         font-weight="900"
         text-anchor="middle" 
-        fill="url(#brightRed)"
-        stroke="#ffffff"
-        stroke-width="0.5"
-        style="letter-spacing: 2px;">SPA</text>
+        fill="#ff2222"
+        style="letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,34,34,0.5);">SPA</text>
   
   <!-- 1 -->
   <text x="295" y="60" 
@@ -42,7 +23,6 @@
         font-size="50" 
         font-weight="900"
         text-anchor="middle" 
-        fill="url(#brightRed)"
-        stroke="#ffffff"
-        stroke-width="0.5">1</text>
+        fill="#ff2222"
+        style="text-shadow: 0 0 10px rgba(255,34,34,0.5);">1</text>
 </svg>
