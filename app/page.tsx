@@ -109,7 +109,7 @@ const showcaseImages = [
   { src: "/images/showcase-silverado.webp", title: "Chevrolet Silverado", description: "", showText: true },
   { src: "/images/hero-skyline.webp", title: "Nissan Skyline R34", description: "", showText: true },
   { src: "/images/showcase-1.webp", title: "", description: "", showText: false },
-  { src: "/images/showcase-2.webp", title: "", description: "", showText: false },
+
   { src: "/images/showcase-3.webp", title: "", description: "", showText: false },
   { src: "/images/IMG_1087.jpg", title: "", description: "", showText: false },
   { src: "/images/IMG_1170.jpg", title: "", description: "", showText: false },
@@ -267,64 +267,78 @@ export default function Home() {
             viewport={{ once: true }} 
             className="relative"
           >
-            {/* Scroll Container */}
-            <div 
-              ref={galleryScrollRef}
-              className="overflow-x-auto pb-4 scroll-smooth" 
-              style={{ 
-                scrollbarWidth: 'none', 
-                msOverflowStyle: 'none',
-                WebkitOverflowScrolling: 'touch',
-                scrollBehavior: 'smooth'
-              }}
-            >
-              <div className="flex gap-4 sm:gap-6 w-max px-4 sm:px-0">
-                {/* 3x3 Grid Rows */}
-                {[0, 1, 2, 3].map((rowIndex) => (
-                  <div key={rowIndex} className="flex flex-col gap-4 sm:gap-6">
-                    {showcaseImages.slice(rowIndex * 3, rowIndex * 3 + 3).map((image, imgIndex) => (
-                      <motion.div
-                        key={imgIndex}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: imgIndex * 0.05, duration: 0.3 }}
-                        whileHover={{ scale: 1.03 }}
-                        className="group relative w-64 sm:w-80 h-48 sm:h-60 rounded-xl overflow-hidden cursor-pointer bg-zinc-900 shadow-lg shadow-purple-500/5"
-                        onClick={() => setSelectedImage({
-                          before: image.src,
-                          after: image.src,
-                          title: image.title || 'Our Work'
-                        })}
-                      >
-                        <img 
-                          src={image.src} 
-                          alt={image.title || 'Auto Spa 1 Work'}
-                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                          loading="lazy"
-                        />
-                        {image.showText && (
-                          <>
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
-                              <h3 className="text-white font-semibold text-sm sm:text-base">{image.title}</h3>
+            <div className="relative flex items-center">
+              {/* Scroll Container */}
+              <div 
+                ref={galleryScrollRef}
+                className="overflow-x-auto pb-4 scroll-smooth flex-1" 
+                style={{ 
+                  scrollbarWidth: 'none', 
+                  msOverflowStyle: 'none',
+                  WebkitOverflowScrolling: 'touch',
+                  scrollBehavior: 'smooth'
+                }}
+              >
+                <div className="flex gap-4 sm:gap-6 w-max px-4 sm:px-0">
+                  {/* 3x3 Grid Rows */}
+                  {[0, 1, 2, 3].map((rowIndex) => (
+                    <div key={rowIndex} className="flex flex-col gap-4 sm:gap-6">
+                      {showcaseImages.slice(rowIndex * 3, rowIndex * 3 + 3).map((image, imgIndex) => (
+                        <motion.div
+                          key={imgIndex}
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: imgIndex * 0.05, duration: 0.3 }}
+                          whileHover={{ scale: 1.03 }}
+                          className="group relative w-64 sm:w-80 h-48 sm:h-60 rounded-xl overflow-hidden cursor-pointer bg-zinc-900 shadow-lg shadow-purple-500/5"
+                          onClick={() => setSelectedImage({
+                            before: image.src,
+                            after: image.src,
+                            title: image.title || 'Our Work'
+                          })}
+                        >
+                          <img 
+                            src={image.src} 
+                            alt={image.title || 'Auto Spa 1 Work'}
+                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                            loading="lazy"
+                          />
+                          {image.showText && (
+                            <>
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                              <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                                <h3 className="text-white font-semibold text-sm sm:text-base">{image.title}</h3>
+                              </div>
+                            </>
+                          )}
+                          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div className="bg-white/20 backdrop-blur-md p-2 rounded-full">
+                              <ZoomIn className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                             </div>
-                          </>
-                        )}
-                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <div className="bg-white/20 backdrop-blur-md p-2 rounded-full">
-                            <ZoomIn className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                           </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                ))}
+                        </motion.div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
               </div>
+              
+              {/* Desktop Scroll Button */}
+              <button
+                onClick={() => {
+                  if (galleryScrollRef.current) {
+                    galleryScrollRef.current.scrollBy({ left: 400, behavior: 'smooth' });
+                  }
+                }}
+                className="hidden lg:flex items-center justify-center w-12 h-12 ml-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full transition-all duration-300 flex-shrink-0"
+              >
+                <ChevronRight className="w-6 h-6 text-white" />
+              </button>
             </div>
             
-            {/* Scroll Hint */}
-            <div className="flex items-center justify-center gap-2 mt-6 text-zinc-500">
+            {/* Scroll Hint - Mobile Only */}
+            <div className="flex lg:hidden items-center justify-center gap-2 mt-6 text-zinc-500">
               <ChevronLeft className="w-4 h-4 animate-pulse" />
               <span className="text-xs sm:text-sm">Scroll to see more</span>
               <ChevronRight className="w-4 h-4 animate-pulse" />
