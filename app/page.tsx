@@ -66,30 +66,6 @@ const services = [
 
 const pricingPackages = [
   {
-    name: "Exterior Only",
-    description: "Exterior detailing packages",
-    options: [
-      { name: "Basic Exterior", priceCar: 160, priceMinivan: 200, features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Windows", "All Chrome", "Gas Door"] },
-      { name: "Wax Only", priceCar: 100, priceMinivan: 150, features: ["Exterior Wash", "Hand Wax", "Tire Shine", "Windows"] },
-      { name: "Buff & Wax", priceCar: 300, priceMinivan: 340, features: ["Exterior Wash", "Paint Buffing", "Premium Wax", "Tire Shine", "Windows"] },
-    ],
-    note: "Black & White Vehicles +$20",
-    popular: false,
-    color: "from-blue-500 to-cyan-400",
-    image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
-  },
-  {
-    name: "Interior Only",
-    description: "Deep interior cleaning and restoration",
-    options: [
-      { name: "Interior Detail", priceCar: 150, priceMinivan: 170, features: ["Vacuum & Shampoo", "Leather Treatment", "Dashboard & Console", "Door Panels", "Door Jambs", "Odor Elimination", "Stain Removal", "Floor Mats", "Headliner"] },
-    ],
-    note: "Pet Hair Removal +$20",
-    popular: false,
-    color: "from-purple-500 to-pink-400",
-    image: "/interior-detail.webp",
-  },
-  {
     name: "Complete Packages",
     description: "Interior + Exterior combined",
     options: [
@@ -101,6 +77,30 @@ const pricingPackages = [
     popular: true,
     color: "from-amber-500 to-orange-400",
     image: "https://images.unsplash.com/photo-1551522435-a13afa10f103?w=800&q=80",
+  },
+  {
+    name: "Exterior",
+    description: "Exterior detailing packages",
+    options: [
+      { name: "Basic Exterior", priceCar: 160, priceMinivan: 200, features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Windows", "All Chrome", "Gas Door"] },
+      { name: "Wax", priceCar: 100, priceMinivan: 150, features: ["Exterior Wash", "Hand Wax", "Tire Shine", "Windows"] },
+      { name: "Buff & Wax", priceCar: 300, priceMinivan: 340, features: ["Exterior Wash", "Paint Buffing", "Premium Wax", "Tire Shine", "Windows"] },
+    ],
+    note: "Black & White Vehicles +$20",
+    popular: false,
+    color: "from-blue-500 to-cyan-400",
+    image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
+  },
+  {
+    name: "Interior",
+    description: "Deep interior cleaning and restoration",
+    options: [
+      { name: "Interior Detail", priceCar: 150, priceMinivan: 170, features: ["Vacuum & Shampoo", "Leather Treatment", "Dashboard & Console", "Door Panels", "Door Jambs", "Odor Elimination", "Stain Removal", "Floor Mats", "Headliner"] },
+    ],
+    note: "Pet Hair Removal +$20",
+    popular: false,
+    color: "from-purple-500 to-pink-400",
+    image: "/interior-detail.webp",
   },
 ];
 
@@ -607,7 +607,7 @@ export default function Home() {
           </motion.div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
             {[
-              { step: "01", title: "Book Online", description: "Schedule your appointment through our easy online booking system or give us a call." },
+              { step: "01", title: "Call or Text", description: "Contact us at (734) 352-9000 to schedule your appointment or ask questions." },
               { step: "02", title: "Drop Off", description: "Bring your vehicle to our Westland location at 38505 Ford Rd." },
               { step: "03", title: "We Work", description: "Our expert team meticulously details your vehicle using premium products." },
               { step: "04", title: "Drive Happy", description: "Pick up your transformed vehicle and enjoy that new car feeling!" },
