@@ -69,95 +69,41 @@ const services = [
 
 const pricingPackages = [
   {
-    name: "Exterior Package",
-    description: "Complete exterior detailing and protection",
-    features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Windows", "All Chrome", "Gas Door", "Add Paint Sealant"],
-    note: "Black & White Vehicles $20 extra",
-    prices: [
-      { vehicle: "Car", price: 160 },
-      { vehicle: "Minivan", price: 200 },
+    name: "Exterior Only",
+    description: "Exterior detailing packages",
+    options: [
+      { name: "Basic Exterior", priceCar: 160, priceMinivan: 200, features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Windows", "All Chrome", "Gas Door"] },
+      { name: "Wax Only", priceCar: 100, priceMinivan: 150, features: ["Exterior Wash", "Hand Wax", "Tire Shine", "Windows"] },
+      { name: "Buff & Wax", priceCar: 300, priceMinivan: 340, features: ["Exterior Wash", "Paint Buffing", "Premium Wax", "Tire Shine", "Windows"] },
     ],
+    note: "Black & White Vehicles +$20",
     popular: false,
     color: "from-blue-500 to-cyan-400",
     image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
   },
   {
-    name: "Exterior Wax Only",
-    description: "Exterior wax protection only",
-    features: ["Exterior Wash", "Hand Wax Application", "Tire Shine", "Window Cleaning"],
-    note: "",
-    prices: [
-      { vehicle: "Car", price: 100 },
-      { vehicle: "Minivan", price: 150 },
-    ],
-    popular: false,
-    color: "from-cyan-500 to-blue-400",
-    image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
-  },
-  {
-    name: "Interior Package",
+    name: "Interior Only",
     description: "Deep interior cleaning and restoration",
-    features: ["Vacuum & Shampoo", "Leather Treatment", "Dashboard & Console", "Door Panels", "Door Jambs", "Odor Elimination", "Stain Removal", "Floor Mats", "Headliner Cleaning"],
-    note: "Pet Hair Removal +$20",
-    prices: [
-      { vehicle: "Car", price: 150 },
-      { vehicle: "Minivan", price: 170 },
+    options: [
+      { name: "Interior Detail", priceCar: 150, priceMinivan: 170, features: ["Vacuum & Shampoo", "Leather Treatment", "Dashboard & Console", "Door Panels", "Door Jambs", "Odor Elimination", "Stain Removal", "Floor Mats", "Headliner"] },
     ],
+    note: "Pet Hair Removal +$20",
     popular: false,
     color: "from-purple-500 to-pink-400",
     image: "/interior-detail.webp",
   },
   {
-    name: "Complete Package",
-    description: "Interior + Exterior detailing combined",
-    features: ["Interior Package", "Exterior Package", "Door Jambs", "Full Protection"],
-    note: "Best Value",
-    prices: [
-      { vehicle: "Car", price: 200 },
-      { vehicle: "Minivan", price: 240 },
+    name: "Complete Packages",
+    description: "Interior + Exterior combined",
+    options: [
+      { name: "Complete Basic", priceCar: 200, priceMinivan: 240, features: ["Full Interior Detail", "Full Exterior Detail", "Door Jambs"] },
+      { name: "Complete + Wax", priceCar: 250, priceMinivan: 290, features: ["Full Interior Detail", "Full Exterior Detail", "Premium Wax", "Door Jambs"] },
+      { name: "Complete + Buff & Wax", priceCar: 350, priceMinivan: 390, features: ["Full Interior Detail", "Full Exterior Detail", "Paint Buffing", "Premium Wax", "Door Jambs"] },
     ],
+    note: "Best Value",
     popular: true,
     color: "from-amber-500 to-orange-400",
     image: "https://images.unsplash.com/photo-1551522435-a13afa10f103?w=800&q=80",
-  },
-  {
-    name: "Complete Package + Wax",
-    description: "Complete package with premium wax finish",
-    features: ["Interior Package", "Exterior Package", "Premium Wax", "Door Jambs", "Full Protection"],
-    note: "",
-    prices: [
-      { vehicle: "Car", price: 250 },
-      { vehicle: "Minivan", price: 290 },
-    ],
-    popular: false,
-    color: "from-orange-500 to-red-400",
-    image: "https://images.unsplash.com/photo-1551522435-a13afa10f103?w=800&q=80",
-  },
-  {
-    name: "Buff & Wax + Complete",
-    description: "Complete package with buff and wax",
-    features: ["Interior Package", "Exterior Package", "Paint Buffing", "Premium Wax", "Door Jambs", "Full Protection"],
-    note: "Ultimate Protection",
-    prices: [
-      { vehicle: "Car", price: 350 },
-      { vehicle: "Minivan", price: 390 },
-    ],
-    popular: false,
-    color: "from-red-500 to-rose-400",
-    image: "https://images.unsplash.com/photo-1551522435-a13afa10f103?w=800&q=80",
-  },
-  {
-    name: "Buff & Wax (Exterior Only)",
-    description: "Exterior buff and wax without interior",
-    features: ["Exterior Wash", "Paint Buffing", "Premium Wax", "Tire Shine", "Window Cleaning"],
-    note: "No Interior Service",
-    prices: [
-      { vehicle: "Car", price: 300 },
-      { vehicle: "Minivan", price: 340 },
-    ],
-    popular: false,
-    color: "from-emerald-500 to-teal-400",
-    image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
   },
 ];
 
@@ -197,13 +143,14 @@ const showcaseImages = [
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<{[key: string]: string}>({
-    "Exterior Package": "Car",
-    "Exterior Wax Only": "Car",
-    "Interior Package": "Car",
-    "Complete Package": "Car",
-    "Complete Package + Wax": "Car",
-    "Buff & Wax + Complete": "Car",
-    "Buff & Wax (Exterior Only)": "Car"
+    "Exterior Only": "Car",
+    "Interior Only": "Car",
+    "Complete Packages": "Car"
+  });
+  const [selectedOption, setSelectedOption] = useState<{[key: string]: number}>({
+    "Exterior Only": 0,
+    "Interior Only": 0,
+    "Complete Packages": 0
   });
   const [currentGalleryIndex, setCurrentGalleryIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -228,9 +175,10 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [isAutoPlaying, isMobile]);
 
-  const getPrice = (pkg: typeof pricingPackages[0], vehicleType: string) => {
-    const price = pkg.prices.find(p => p.vehicle === vehicleType)?.price || pkg.prices[0].price;
-    return price;
+  const getPrice = (pkg: typeof pricingPackages[0], vehicleType: string, optionIndex: number) => {
+    const option = pkg.options[optionIndex];
+    if (!option) return 0;
+    return vehicleType === "Minivan" ? option.priceMinivan : option.priceCar;
   };
 
   return (
@@ -458,20 +406,16 @@ export default function Home() {
                   <CardContent className="p-4 sm:p-6 relative">
                     <h3 className="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">{pkg.name}</h3>
                     <p className="text-zinc-400 text-xs sm:text-sm mb-3 sm:mb-4">{pkg.description}</p>
-                    <div className="mb-4 sm:mb-6">
-                      <motion.div key={selectedVehicle[pkg.name]} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-3xl sm:text-5xl font-bold text-white">
-                        <span className="text-lg sm:text-2xl text-zinc-500">$</span>{getPrice(pkg, selectedVehicle[pkg.name])}
-                      </motion.div>
-                      <p className="text-zinc-500 text-xs sm:text-sm mt-1">Starting price</p>
-                    </div>
+                    
+                    {/* Vehicle Selector */}
                     <div className="mb-4 sm:mb-6">
                       <p className="text-zinc-400 text-xs mb-2 uppercase tracking-wider">Select your vehicle</p>
-                      <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
-                        {["Car", "Pick Up", "Small SUV", "SUV & Minivan", "Large SUV", "Conversion Van"].map((vehicle) => (
+                      <div className="grid grid-cols-2 gap-2">
+                        {["Car", "Minivan"].map((vehicle) => (
                           <button
                             key={vehicle}
                             onClick={() => setSelectedVehicle({...selectedVehicle, [pkg.name]: vehicle})}
-                            className={`py-2 px-1 text-xs rounded-lg transition-all duration-300 ${
+                            className={`py-2 px-3 text-sm rounded-lg transition-all duration-300 ${
                               selectedVehicle[pkg.name] === vehicle 
                                 ? `bg-gradient-to-r ${pkg.color} text-white font-semibold shadow-lg` 
                                 : 'bg-white/5 text-zinc-400 hover:bg-white/10'
@@ -482,21 +426,51 @@ export default function Home() {
                         ))}
                       </div>
                     </div>
-                    <div className="space-y-2 mb-4 sm:mb-6">
-                      {pkg.features.slice(0, isMobile ? 5 : 8).map((feature, i) => (
-                        <div key={i} className="flex items-center gap-3 text-zinc-300">
-                          <CheckCircle className={`w-4 h-4 sm:w-5 sm:h-5 ${pkg.popular ? 'text-amber-400' : 'text-emerald-400'} flex-shrink-0`} />
-                          <span className="text-xs sm:text-sm">{feature}</span>
+
+                    {/* Package Options */}
+                    <div className="space-y-3 mb-4 sm:mb-6">
+                      {pkg.options.map((option, optIndex) => (
+                        <div 
+                          key={optIndex}
+                          onClick={() => setSelectedOption({...selectedOption, [pkg.name]: optIndex})}
+                          className={`p-3 rounded-lg cursor-pointer transition-all duration-300 ${
+                            selectedOption[pkg.name] === optIndex 
+                              ? 'bg-white/10 border border-white/20' 
+                              : 'bg-white/5 border border-transparent hover:bg-white/8'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-white font-semibold text-sm">{option.name}</span>
+                            <span className="text-xl font-bold text-white">
+                              <span className="text-sm text-zinc-500">$</span>
+                              {selectedVehicle[pkg.name] === "Minivan" ? option.priceMinivan : option.priceCar}
+                            </span>
+                          </div>
+                          {selectedOption[pkg.name] === optIndex && (
+                            <motion.div 
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              className="space-y-1 pt-2 border-t border-white/10"
+                            >
+                              {option.features.map((feature, fIndex) => (
+                                <div key={fIndex} className="flex items-center gap-2 text-zinc-400 text-xs">
+                                  <CheckCircle className={`w-3 h-3 ${pkg.popular ? 'text-amber-400' : 'text-emerald-400'} flex-shrink-0`} />
+                                  {feature}
+                                </div>
+                              ))}
+                            </motion.div>
+                          )}
                         </div>
                       ))}
                     </div>
+
                     {pkg.note && (
                       <p className="text-amber-400 text-xs mb-3 sm:mb-4 italic flex items-center gap-2">
                         <Sparkles className="w-3 h-3" /> {pkg.note}
                       </p>
                     )}
                     <Button onClick={() => scrollToSection("contact")} className={`w-full py-5 sm:py-6 rounded-full font-semibold text-sm sm:text-base ${pkg.popular ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}>
-                      Book {pkg.name}
+                      Book {pkg.options[selectedOption[pkg.name]]?.name || pkg.name}
                     </Button>
                   </CardContent>
                 </Card>
