@@ -156,11 +156,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] overflow-x-hidden">
-      <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/60 md:bg-[#0a0a0a]/80 backdrop-blur-md md:backdrop-blur-xl border-b border-white/5">
+      <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a] border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center h-20 relative">
             <motion.a href="#" className="flex items-center" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <img src="/logo.svg" alt="Auto Spa 1 Logo" className="h-12 sm:h-14 w-auto object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" style={{ filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.4)) brightness(1.3) contrast(1.2)' }} />
+              <img src="/logo.svg" alt="Auto Spa 1 Logo" className="h-14 sm:h-16 w-auto" />
             </motion.a>
             <div className="hidden md:flex items-center gap-8 justify-end">
               {["Services", "Gallery", "Pricing", "Reviews", "Contact"].map((item) => (
@@ -648,7 +648,7 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-12 mb-8 sm:mb-12">
             <div className="col-span-2">
               <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                <img src="/logo.svg" alt="Auto Spa 1 Logo" className="h-10 sm:h-12 w-auto object-contain" style={{ filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.4)) brightness(1.3) contrast(1.2)' }} />
+                <img src="/logo.svg" alt="Auto Spa 1 Logo" className="h-10 sm:h-12 w-auto" />
               </div>
               <p className="text-zinc-400 max-w-sm mb-4 sm:mb-6 text-sm sm:text-base">Premium window tinting and auto detailing services in Westland, MI. Transforming vehicles with expert care since 2019.</p>
             </div>
