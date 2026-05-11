@@ -158,7 +158,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#0a0a0a] overflow-x-hidden">
       <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/60 md:bg-[#0a0a0a]/80 backdrop-blur-md md:backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 relative">
+          <div className="flex items-center justify-center h-20 relative">
             <motion.a href="#" className="flex items-center" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <img src="/logo.svg" alt="Auto Spa 1 Logo" className="h-12 sm:h-14 w-auto object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" style={{ filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.4)) brightness(1.3) contrast(1.2)' }} />
             </motion.a>
@@ -173,25 +173,8 @@ export default function Home() {
                 <Button onClick={() => scrollToSection("contact")} className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:opacity-90 font-medium px-6">Get Quote</Button>
               </motion.div>
             </div>
-            <motion.button className="md:hidden text-white p-2 absolute right-4" onClick={() => setIsMenuOpen(!isMenuOpen)} whileTap={{ scale: 0.9 }}>
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </motion.button>
           </div>
         </div>
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="md:hidden bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/10">
-              <div className="px-4 py-6 space-y-4">
-                {["Services", "Gallery", "Pricing", "Reviews", "Process", "Contact"].map((item) => (
-                  <motion.button key={item} onClick={() => scrollToSection(item.toLowerCase())} className="block w-full text-left text-zinc-400 hover:text-white py-3 border-b border-white/5" whileHover={{ x: 10 }}>{item}</motion.button>
-                ))}
-                <a href="tel:734-352-9000" className="flex items-center justify-center w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white mt-4 py-3 rounded-lg font-semibold">
-                  <Phone className="w-4 h-4 mr-2" /> Call Now
-                </a>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </motion.nav>
 
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
