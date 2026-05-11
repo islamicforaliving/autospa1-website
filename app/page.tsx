@@ -528,7 +528,27 @@ export default function Home() {
             <motion.div variants={fadeInUp}><Badge className="mb-4 sm:mb-6 bg-yellow-500/10 text-yellow-400 border-yellow-500/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm"><Star className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 fill-yellow-400" />Customer Reviews</Badge></motion.div>
             <motion.h2 variants={fadeInUp} className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">What Our Customers Say</motion.h2>
             <motion.p variants={fadeInUp} className="text-base sm:text-xl text-zinc-400 max-w-2xl mx-auto px-4 sm:px-0">Real reviews from real customers in Westland, MI.</motion.p>
+            
+            {/* Google Rating Summary */}
+            <motion.div variants={fadeInUp} className="mt-6 sm:mt-8 inline-flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-5 sm:px-6 py-3">
+              <svg className="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              <div className="flex items-center gap-2">
+                <span className="text-white font-bold text-lg sm:text-xl">5.0</span>
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+              </div>
+              <span className="text-zinc-400 text-sm">157+ Google Reviews</span>
+            </motion.div>
           </motion.div>
+          
           <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
             {realReviews.map((review, index) => (
               <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1, duration: 0.4 }}>
@@ -555,6 +575,25 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+          
+          {/* See All Reviews Button */}
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-10 sm:mt-12">
+            <a 
+              href="https://www.google.com/search?sca_esv=acaa67c5aa9258d3&sxsrf=ANbL-n5MHuhNSs8P2haJ8-wuiMRN_pPhLg:1777774094164&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qORejIVL0ShRmAzAI9NeknnmpI2evWcGV5ohWnHlzoU6yC3tKVTwSUrBtP4MG6yPk0jkBIGiJ7qisv9TJ5cC34OZgcQiEfFXlZ5s3vGLreeDim_3sTt-Or0-L39SJXpiXkXJ6LiA%3D&q=Auto+Spa+1+%7C+Tinting+%26+Detailing+Reviews&sa=X&ved=2ahUKEwjLnP7KhJyUAxXbmYkEHc8PO4cQ0bkNegQIJxAH&biw=1920&bih=992&dpr=1&zx=1778459594165"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold px-6 sm:px-8 py-4 sm:py-5 rounded-full transition-all duration-300 group"
+            >
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              <span className="text-sm sm:text-base">See All Google Reviews</span>
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+          </motion.div>
         </div>
       </section>
 
