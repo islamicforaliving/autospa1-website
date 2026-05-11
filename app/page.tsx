@@ -158,11 +158,12 @@ export default function Home() {
     <div className="min-h-screen bg-[#0a0a0a] overflow-x-hidden">
       <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a] border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center h-20 relative">
-            <motion.a href="#" className="flex items-center" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+          <div className="grid grid-cols-3 h-20 items-center">
+            <div className="hidden md:block" />
+            <motion.a href="#" className="flex items-center justify-center" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <img src="/logo.png" alt="Auto Spa 1 Logo" className="h-14 sm:h-16 w-auto" />
             </motion.a>
-            <div className="hidden md:flex items-center gap-8 absolute right-0">
+            <div className="hidden md:flex items-center gap-8 justify-end">
               {["Services", "Gallery", "Pricing", "Reviews", "Contact"].map((item) => (
                 <motion.button key={item} onClick={() => scrollToSection(item.toLowerCase())} className="text-sm text-zinc-400 hover:text-white transition-colors relative group" whileHover={{ y: -2 }}>
                   {item}
