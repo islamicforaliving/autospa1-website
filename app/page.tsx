@@ -152,13 +152,16 @@ export default function Home() {
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <motion.div style={{ y: isMobile ? 0 : heroY, opacity: isMobile ? 1 : heroOpacity }} className="absolute inset-0">
           <div className="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=85" alt="Premium Auto Detailing" className="w-full h-full object-cover" style={{ objectPosition: 'center center' }} />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
+            <img src="/images/hero-corvette.jpg" alt="Auto Spa 1 - Premium Auto Detailing in Westland, MI" className="w-full h-full object-cover blur-[2px] scale-105" style={{ objectPosition: 'center center' }} />
+            {/* Red overlay matching the logo color */}
+            <div className="absolute inset-0 bg-gradient-to-b from-red-900/40 via-red-800/30 to-red-900/50" />
+            {/* Soft blur at bottom to blend with white background */}
+            <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white via-white/80 to-transparent" />
           </div>
           {!isMobile && (
             <>
-              <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-[120px]" />
-              <motion.div animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px]" />
+              <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-red-500/10 rounded-full blur-[120px]" />
+              <motion.div animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[100px]" />
             </>
           )}
         </motion.div>
