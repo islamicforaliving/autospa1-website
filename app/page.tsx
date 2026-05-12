@@ -418,10 +418,12 @@ export default function Home() {
                         >
                           <div className="flex items-center justify-between mb-2">
                             <span className="text-white font-semibold text-sm">{option.name}</span>
-                            <span className="text-xl font-bold text-white">
-                              <span className="text-sm text-zinc-500">$</span>
-                              {selectedVehicle[pkg.name] === "Minivan" ? option.priceMinivan : option.priceCar}
-                            </span>
+                            {(selectedVehicle[pkg.name] === "Minivan" ? option.priceMinivan : option.priceCar) > 0 && (
+                              <span className="text-xl font-bold text-white">
+                                <span className="text-sm text-zinc-500">$</span>
+                                {selectedVehicle[pkg.name] === "Minivan" ? option.priceMinivan : option.priceCar}
+                              </span>
+                            )}
                           </div>
                           {selectedOption[pkg.name] === optIndex && (
                             <motion.div 
