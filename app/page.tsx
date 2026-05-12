@@ -152,7 +152,7 @@ export default function Home() {
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <motion.div style={{ y: isMobile ? 0 : heroY, opacity: isMobile ? 1 : heroOpacity }} className="absolute inset-0">
           <div className="absolute inset-0">
-            <img src="/images/hero-corvette.jpg" alt="Auto Spa 1 - Premium Auto Detailing in Westland, MI" className="w-full h-full object-cover blur-[2px] scale-105" style={{ objectPosition: 'center center' }} />
+            <img src="/images/hero-corvette.jpg" alt="Auto Spa 1 - Premium Auto Detailing in Westland, MI" className="w-full h-full object-cover blur-[1px] scale-105" style={{ objectPosition: 'center center' }} />
             {/* Red overlay matching the logo color */}
             <div className="absolute inset-0 bg-gradient-to-b from-red-900/40 via-red-800/30 to-red-900/50" />
             {/* Soft blur at bottom to blend with white background */}
@@ -168,7 +168,7 @@ export default function Home() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-12 sm:pb-20">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="text-center">
-            <motion.div variants={fadeInUp} className="inline-block bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-3xl px-4 sm:px-8 py-6 sm:py-10 border border-gray-200 shadow-2xl">
+            <motion.div variants={fadeInUp} className="inline-block bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl px-4 sm:px-8 py-6 sm:py-10 border border-white/40 shadow-xl">
               <motion.div className="mb-4 sm:mb-6">
                 <Badge className="bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-200 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm">
                   <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 fill-yellow-500 text-yellow-500" />#1 Rated Auto Detailing in Westland
