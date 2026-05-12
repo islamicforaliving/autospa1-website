@@ -64,6 +64,7 @@ const services = [
   { icon: CheckCircle, title: "Windshield Repair", description: "Professional chip and crack repair to restore visibility and prevent further damage. Quick same-day service.", price: "", features: ["Same-Day Service", "Chip Repair", "Crack Repair", "Insurance Approved"] },
   { icon: Car, title: "Clay Paint Restoration", description: "Deep cleaning clay bar treatment that removes embedded contaminants and restores your paint's smooth finish.", price: "", features: ["Removes Contaminants", "Restores Smoothness", "Prepares for Wax", "Safe for Paint"] },
   { icon: Droplets, title: "Paint Correction", description: "Professional paint correction to remove swirl marks, scratches, and oxidation for a mirror-like finish.", price: "", features: ["Removes Swirls", "Removes Scratches", "Restores Clarity", "Mirror Finish"] },
+  { icon: Zap, title: "Paint Correction Remover", description: "Specialized treatment to safely remove old paint correction residue and prepare surface for new protection.", price: "", features: ["Safe Removal", "Surface Prep", "Restores Original Finish", "Ready for New Coating"] },
 ];
 
 const pricingPackages = [
@@ -381,11 +382,11 @@ export default function Home() {
                   </div>
                   <CardContent className="p-4 sm:p-6 relative">
                     <h3 className="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">{pkg.name}</h3>
-                    <p className="text-zinc-400 text-xs sm:text-sm mb-3 sm:mb-4">{pkg.description}</p>
+                    <p className="text-zinc-300 text-sm sm:text-base mb-3 sm:mb-4">{pkg.description}</p>
                     
                     {/* Vehicle Selector */}
                     <div className="mb-4 sm:mb-6">
-                      <p className="text-zinc-400 text-xs mb-2 uppercase tracking-wider">Select your vehicle</p>
+                      <p className="text-zinc-300 text-sm mb-2 uppercase tracking-wider">Select your vehicle</p>
                       <div className="grid grid-cols-2 gap-2">
                         {["Car", "Minivan"].map((vehicle) => (
                           <button
@@ -394,7 +395,7 @@ export default function Home() {
                             className={`py-2 px-3 text-sm rounded-lg transition-all duration-300 ${
                               selectedVehicle[pkg.name] === vehicle 
                                 ? `bg-gradient-to-r ${pkg.color} text-white font-semibold shadow-lg` 
-                                : 'bg-white/5 text-zinc-400 hover:bg-white/10'
+                                : 'bg-white/5 text-zinc-300 hover:bg-white/10'
                             }`}
                           >
                             {vehicle}
@@ -429,7 +430,7 @@ export default function Home() {
                               className="space-y-1 pt-2 border-t border-white/10"
                             >
                               {option.features.map((feature, fIndex) => (
-                                <div key={fIndex} className="flex items-center gap-2 text-zinc-400 text-xs">
+                                <div key={fIndex} className="flex items-center gap-2 text-zinc-200 text-sm">
                                   <CheckCircle className={`w-3 h-3 ${pkg.popular ? 'text-amber-400' : 'text-emerald-400'} flex-shrink-0`} />
                                   {feature}
                                 </div>
