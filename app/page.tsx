@@ -168,7 +168,7 @@ export default function Home() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-12 sm:pb-20">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="text-center">
-            <motion.div variants={fadeInUp} className="inline-block bg-white/60 backdrop-blur-md rounded-2xl sm:rounded-3xl px-4 sm:px-8 py-6 sm:py-10 border border-white/30 shadow-lg">
+            <motion.div variants={fadeInUp} className="inline-block bg-white/40 backdrop-blur-lg rounded-2xl sm:rounded-3xl px-4 sm:px-8 py-6 sm:py-10 border border-white/20 shadow-md">
               <motion.div className="mb-4 sm:mb-6">
                 <Badge className="bg-red-100 text-red-700 border-red-200 hover:bg-red-200 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm">
                   <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 fill-yellow-500 text-yellow-500" />#1 Rated Auto Detailing in Westland
@@ -192,7 +192,7 @@ export default function Home() {
             
             <motion.div variants={staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-8 max-w-4xl mx-auto mt-10 sm:mt-16 px-4 sm:px-0">
               {[{ value: 157, suffix: "+", label: "5-Star Reviews" }, { value: 500, suffix: "+", label: "Vehicles Detailed" }, { value: 5, suffix: ".0", label: "Star Rating" }, { value: 25, suffix: "+", label: "Years Experience" }].map((stat, index) => (
-                <motion.div key={index} variants={scaleIn} className="text-center p-3 sm:p-6 rounded-xl sm:rounded-2xl bg-white/60 backdrop-blur-md border border-white/30 shadow-lg" whileHover={!isMobile ? { y: -5, borderColor: "rgba(255, 255, 255, 0.5)" } : {}}>
+                <motion.div key={index} variants={scaleIn} className="text-center p-3 sm:p-6 rounded-xl sm:rounded-2xl bg-white/40 backdrop-blur-lg border border-white/20 shadow-md" whileHover={!isMobile ? { y: -5, borderColor: "rgba(255, 255, 255, 0.4)" } : {}}>
                   <div className="text-2xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-1 sm:mb-2"><AnimatedCounter value={stat.value} suffix={stat.suffix} /></div>
                   <div className="text-xs sm:text-sm text-gray-600">{stat.label}</div>
                 </motion.div>
