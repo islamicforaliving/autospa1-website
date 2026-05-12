@@ -432,7 +432,7 @@ export default function Home() {
                               className="space-y-1 pt-2 border-t border-white/10"
                             >
                               {option.features.map((feature, fIndex) => (
-                                <div key={fIndex} className="flex items-center gap-2 text-zinc-200 text-sm">
+                                <div key={fIndex} className="flex items-center gap-2 text-zinc-200 text-base">
                                   <CheckCircle className={`w-3 h-3 ${pkg.popular ? 'text-amber-400' : 'text-emerald-400'} flex-shrink-0`} />
                                   {feature}
                                 </div>
@@ -488,7 +488,7 @@ export default function Home() {
                     <p className="text-zinc-400 text-sm sm:text-base mb-4 sm:mb-6 leading-relaxed">{service.description}</p>
                     <ul className="space-y-2 mb-4 sm:mb-6">
                       {service.features.slice(0, isMobile ? 3 : 4).map((feature, i) => (
-                        <li key={i} className="flex items-center gap-2 text-xs sm:text-sm text-zinc-500">
+                        <li key={i} className="flex items-center gap-2 text-sm sm:text-base text-zinc-200">
                           <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" />
                           {feature}
                         </li>
