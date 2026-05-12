@@ -127,14 +127,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
-      <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
+      <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm h-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-20 items-center justify-center md:grid md:grid-cols-3">
+          <div className="flex h-24 items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr]">
             <div className="hidden md:block" />
-            <motion.a href="#" className="flex items-center" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <img src="/logo.png" alt="Auto Spa 1 Logo" className="h-16 sm:h-20 w-auto max-w-[320px] object-contain" />
+            <motion.a href="#" className="flex items-center justify-center" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <img src="/logo.png" alt="Auto Spa 1 Logo" className="h-14 sm:h-16 w-auto max-w-[280px] object-contain" />
             </motion.a>
-            <div className="hidden md:flex items-center gap-8 justify-end">
+            <div className="hidden md:flex items-center gap-6 justify-end">
               {["Services", "Gallery", "Pricing", "Reviews", "Contact"].map((item) => (
                 <motion.button key={item} onClick={() => scrollToSection(item === "Services" ? "pricing" : item.toLowerCase())} className="text-sm text-gray-600 hover:text-gray-900 transition-colors relative group font-medium" whileHover={{ y: -2 }}>
                   {item}
