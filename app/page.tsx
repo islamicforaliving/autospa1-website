@@ -62,6 +62,8 @@ const services = [
   { icon: Sun, title: "Window Tinting", description: "Premium ceramic and carbon tint films that block UV rays, reduce heat, and enhance privacy while looking sleek.", price: "", features: ["UV Protection", "Heat Reduction", "Privacy Enhancement", "Lifetime Warranty"] },
   { icon: Sparkles, title: "Ceramic Coating", description: "Long-lasting paint protection with hydrophobic technology. Your paint stays showroom-new with minimal maintenance.", price: "Starting at $799", features: ["7+ Years of Protection", "Hydrophobic Finish", "Chemical Resistance", "Deep Gloss"] },
   { icon: CheckCircle, title: "Windshield Repair", description: "Professional chip and crack repair to restore visibility and prevent further damage. Quick same-day service.", price: "", features: ["Same-Day Service", "Chip Repair", "Crack Repair", "Insurance Approved"] },
+  { icon: Car, title: "Clay Paint Restoration", description: "Deep cleaning clay bar treatment that removes embedded contaminants and restores your paint's smooth finish.", price: "", features: ["Removes Contaminants", "Restores Smoothness", "Prepares for Wax", "Safe for Paint"] },
+  { icon: Droplets, title: "Paint Correction", description: "Professional paint correction to remove swirl marks, scratches, and oxidation for a mirror-like finish.", price: "", features: ["Removes Swirls", "Removes Scratches", "Restores Clarity", "Mirror Finish"] },
 ];
 
 const pricingPackages = [
@@ -82,7 +84,8 @@ const pricingPackages = [
     name: "Exterior",
     description: "Exterior detailing packages",
     options: [
-      { name: "Wax", priceCar: 150, priceMinivan: 190, features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Windows", "All Chrome", "Gas Door", "Hand Wax", "Tire Shine"] },
+      { name: "Basic Exterior", priceCar: 0, priceMinivan: 0, features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Windows", "All Chrome", "Gas Door"] },
+      { name: "Wax", priceCar: 150, priceMinivan: 190, features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Windows", "All Chrome", "Gas Door", "Wax", "Tire Shine"] },
       { name: "Buff & Wax", priceCar: 300, priceMinivan: 340, features: ["Exterior Wash", "Paint Buffing", "Premium Wax", "Tire Shine", "Windows"] },
     ],
     note: "",
@@ -94,7 +97,7 @@ const pricingPackages = [
     name: "Interior",
     description: "Deep interior cleaning and restoration",
     options: [
-      { name: "Interior Detail", priceCar: 150, priceMinivan: 170, features: ["Vacuum & Shampoo", "Leather Treatment", "Dashboard & Console", "Door Panels", "Door Jambs", "Odor Elimination", "Stain Removal", "Floor Mats", "Headliner"] },
+      { name: "Interior Detail", priceCar: 150, priceMinivan: 170, features: ["Vacuum & Shampoo", "Leather Treatment", "Dashboard & Console", "Door Panels", "Door Jambs", "Odor Elimination", "Stain Removal", "Floor Mats"] },
     ],
     note: "Pet Hair Removal +$20",
     popular: false,
