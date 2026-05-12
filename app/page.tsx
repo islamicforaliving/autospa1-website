@@ -152,7 +152,7 @@ export default function Home() {
       <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <motion.div style={{ y: isMobile ? 0 : heroY, opacity: isMobile ? 1 : heroOpacity }} className="absolute inset-0">
           <div className="absolute inset-0">
-            <img src="/images/hero-corvette.jpg" alt="Auto Spa 1 - Premium Auto Detailing in Westland, MI" className="w-full h-full object-cover blur-[1px] scale-105" style={{ objectPosition: 'center center' }} />
+            <img src="/images/hero-corvette.png" alt="Auto Spa 1 - Premium Auto Detailing in Westland, MI" className="w-full h-full object-cover scale-105" style={{ objectPosition: 'center center' }} />
             {/* Red overlay matching the logo color */}
             <div className="absolute inset-0 bg-gradient-to-b from-red-900/40 via-red-800/30 to-red-900/50" />
             {/* Soft blur at bottom to blend with white background */}
