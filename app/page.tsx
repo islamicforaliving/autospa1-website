@@ -132,7 +132,7 @@ export default function Home() {
           <div className="flex h-20 items-center justify-center md:grid md:grid-cols-3">
             <div className="hidden md:block" />
             <motion.a href="#" className="flex items-center" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <img src="/logo.png" alt="Auto Spa 1 Logo" className="h-20 sm:h-24 w-auto max-w-[280px] object-contain" />
+              <img src="/logo.png" alt="Auto Spa 1 Logo" className="h-28 sm:h-36 w-auto max-w-none object-contain" />
             </motion.a>
             <div className="hidden md:flex items-center gap-8 justify-end">
               {["Services", "Gallery", "Pricing", "Reviews", "Contact"].map((item) => (
@@ -523,7 +523,7 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-12 mb-8 sm:mb-12">
             <div className="col-span-2">
               <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                <img src="/logo.png" alt="Auto Spa 1 Logo" className="h-16 sm:h-20 w-auto max-w-[200px] object-contain" />
+                <img src="/logo.png" alt="Auto Spa 1 Logo" className="h-20 sm:h-24 w-auto max-w-none object-contain" />
               </div>
               <p className="text-gray-600 max-w-sm mb-4 sm:mb-6 text-sm sm:text-base">Premium window tinting and auto detailing services in Westland, MI. Transforming vehicles with expert care since 2019.</p>
             </div>
