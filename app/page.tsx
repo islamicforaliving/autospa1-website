@@ -485,7 +485,7 @@ export default function Home() {
                       <service.icon className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400" />
                     </div>
                     <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 sm:mb-3 group-hover:text-blue-400 transition-colors">{service.title}</h3>
-                    <p className="text-zinc-400 text-sm sm:text-base mb-4 sm:mb-6 leading-relaxed">{service.description}</p>
+                    <p className="text-zinc-300 text-base sm:text-lg mb-4 sm:mb-6 leading-relaxed">{service.description}</p>
                     <ul className="space-y-2 mb-4 sm:mb-6">
                       {service.features.slice(0, isMobile ? 3 : 4).map((feature, i) => (
                         <li key={i} className="flex items-center gap-2 text-sm sm:text-base text-zinc-200">
