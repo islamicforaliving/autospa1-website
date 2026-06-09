@@ -326,8 +326,8 @@ export default function Home() {
                     </div>
 
                     {pkg.note && (
-                      <p className="text-red-600 text-xs mb-3 sm:mb-4 italic flex items-center gap-2">
-                        <Sparkles className="w-3 h-3" /> {pkg.note}
+                      <p className="text-red-600 text-sm sm:text-base mb-3 sm:mb-4 italic flex items-center gap-2">
+                        <Sparkles className="w-4 h-4" /> {pkg.note}
                       </p>
                     )}
                     <div className="grid grid-cols-2 gap-3">
@@ -370,9 +370,8 @@ export default function Home() {
               >
                 <Card className={`group bg-white border-gray-200 hover:border-blue-300 transition-all duration-300 h-full overflow-hidden shadow-md hover:shadow-xl ${service.image ? "flex flex-col md:flex-row" : ""}`}>
                   {service.image && (
-                    <div className="relative md:w-2/5 h-48 sm:h-56 md:h-auto overflow-hidden flex-shrink-0">
-                      <img src={service.image} alt={service.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-                      <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-white via-transparent to-transparent" />
+                    <div className="relative md:w-1/2 h-48 sm:h-56 md:h-auto overflow-hidden flex-shrink-0">
+                      <img src={service.image} alt={service.title} className="w-full h-full object-contain md:object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
                     </div>
                   )}
                   <CardContent className={`p-5 sm:p-8 relative flex-1 ${service.image ? "md:pl-6" : ""}`}>
