@@ -60,7 +60,7 @@ const services = [
   { icon: Car, title: "Clay Paint Restoration", description: "Deep cleaning clay bar treatment that removes embedded contaminants and restores your paint's smooth finish.", price: "", features: ["Removes Contaminants", "Restores Smoothness", "Prepares for Wax", "Safe for Paint"] },
   { icon: Droplets, title: "Paint Correction", description: "Professional paint correction to remove swirl marks, scratches, and oxidation for a mirror-like finish.", price: "", features: ["Removes Swirls", "Removes Scratches", "Restores Clarity", "Mirror Finish"] },
   { icon: Zap, title: "Paint Correction Remover", description: "Specialized treatment to safely remove old paint correction residue and prepare surface for new protection.", price: "", features: ["Safe Removal", "Surface Prep", "Restores Original Finish", "Ready for New Coating"] },
-  { icon: Sun, title: "Headlight Restoration", description: "Professional restoration to remove oxidation, yellowing, and haze from headlights. Restores clarity and improves nighttime visibility.", price: "$60", features: ["Removes Oxidation", "Restores Clarity", "Improves Visibility", "UV Protection"] },
+  { icon: Sun, title: "Headlight Restoration", description: "Professional restoration to remove oxidation, yellowing, and haze from headlights. Restores clarity and improves nighttime visibility.", price: "$60", features: ["Removes Oxidation", "Restores Clarity", "Improves Visibility", "UV Protection"], image: "/images/headlight-restoration.jpg" },
 ];
 
 const pricingPackages = [
@@ -362,6 +362,12 @@ export default function Home() {
             {services.map((service, index) => (
               <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05, duration: 0.4 }}>
                 <Card className="group bg-white border-gray-200 hover:border-blue-300 transition-all duration-300 h-full overflow-hidden shadow-md hover:shadow-xl">
+                  {service.image && (
+                    <div className="relative h-40 sm:h-48 overflow-hidden">
+                      <img src={service.image} alt={service.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+                    </div>
+                  )}
                   <CardContent className="p-5 sm:p-8 relative">
                     <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-blue-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
                       <service.icon className="w-6 h-6 sm:w-8 sm:h-8 text-red-600" />
