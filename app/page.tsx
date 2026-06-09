@@ -360,15 +360,22 @@ export default function Home() {
           </motion.div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {services.map((service, index) => (
-              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05, duration: 0.4 }}>
-                <Card className="group bg-white border-gray-200 hover:border-blue-300 transition-all duration-300 h-full overflow-hidden shadow-md hover:shadow-xl">
+              <motion.div 
+                key={index} 
+                initial={{ opacity: 0, y: 30 }} 
+                whileInView={{ opacity: 1, y: 0 }} 
+                viewport={{ once: true }} 
+                transition={{ delay: index * 0.05, duration: 0.4 }}
+                className={service.image ? "md:col-span-2 lg:col-span-2" : ""}
+              >
+                <Card className={`group bg-white border-gray-200 hover:border-blue-300 transition-all duration-300 h-full overflow-hidden shadow-md hover:shadow-xl ${service.image ? "flex flex-col md:flex-row" : ""}`}>
                   {service.image && (
-                    <div className="relative h-40 sm:h-48 overflow-hidden">
+                    <div className="relative md:w-2/5 h-48 sm:h-56 md:h-auto overflow-hidden flex-shrink-0">
                       <img src={service.image} alt={service.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-white via-transparent to-transparent" />
                     </div>
                   )}
-                  <CardContent className="p-5 sm:p-8 relative">
+                  <CardContent className={`p-5 sm:p-8 relative flex-1 ${service.image ? "md:pl-6" : ""}`}>
                     <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-blue-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
                       <service.icon className="w-6 h-6 sm:w-8 sm:h-8 text-red-600" />
                     </div>
