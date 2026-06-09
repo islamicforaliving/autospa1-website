@@ -60,6 +60,7 @@ const services = [
   { icon: Car, title: "Clay Paint Restoration", description: "Deep cleaning clay bar treatment that removes embedded contaminants and restores your paint's smooth finish.", price: "", features: ["Removes Contaminants", "Restores Smoothness", "Prepares for Wax", "Safe for Paint"] },
   { icon: Droplets, title: "Paint Correction", description: "Professional paint correction to remove swirl marks, scratches, and oxidation for a mirror-like finish.", price: "", features: ["Removes Swirls", "Removes Scratches", "Restores Clarity", "Mirror Finish"] },
   { icon: Zap, title: "Paint Correction Remover", description: "Specialized treatment to safely remove old paint correction residue and prepare surface for new protection.", price: "", features: ["Safe Removal", "Surface Prep", "Restores Original Finish", "Ready for New Coating"] },
+  { icon: Sun, title: "Headlight Restoration", description: "Professional restoration to remove oxidation, yellowing, and haze from headlights. Restores clarity and improves nighttime visibility.", price: "$60", features: ["Removes Oxidation", "Restores Clarity", "Improves Visibility", "UV Protection"] },
 ];
 
 const pricingPackages = [
@@ -79,6 +80,7 @@ const pricingPackages = [
       { name: "Basic Exterior", priceCar: 0, priceMinivan: 0, features: ["Wash", "Removes Tar & Bugs", "Tires & Rims", "Wheel Wells", "Windows", "All Chrome", "Gas Door"] },
       { name: "Wax", priceCar: 150, priceMinivan: 190, features: ["Wash", "Removes Tar & Bugs", "Clay Bar Treatment", "Tires & Rims", "Wheel Wells", "Windows", "All Chrome", "Gas Door", "Wax", "Tire Shine"] },
       { name: "Buff & Wax", priceCar: 300, priceMinivan: 340, features: ["Exterior Wash", "Clay Bar Treatment", "Paint Buffing", "Premium Wax", "Tire Shine", "Windows"] },
+      { name: "Headlight Restoration", priceCar: 60, priceMinivan: 60, features: ["Removes Oxidation", "Restores Clarity", "Improves Night Visibility", "UV Protection"] },
     ],
     note: "", popular: false, color: "from-blue-500 to-blue-600",
     image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80",
@@ -94,6 +96,7 @@ const pricingPackages = [
 ];
 
 const showcaseImages = [
+  { src: "/images/headlight-restoration.jpg", title: "Headlight Restoration", showText: true },
   { src: "/images/showcase-corvette-blue.webp", title: "Chevrolet Corvette", showText: true },
   { src: "/images/showcase-silverado.webp", title: "Chevrolet Silverado", showText: true },
   { src: "/images/hero-skyline.webp", title: "Nissan Skyline R34", showText: true },
