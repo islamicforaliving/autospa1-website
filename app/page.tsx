@@ -88,7 +88,7 @@ const pricingPackages = [
     options: [
       { name: "Interior Detail", priceCar: 150, priceMinivan: 170, features: ["Vacuum & Shampoo", "Leather Treatment", "Dashboard & Console", "Door Panels", "Door Jambs", "Odor Elimination", "Stain Removal", "Floor Mats"] },
     ],
-    note: "Pet Hair Removal +$20", popular: false, color: "from-blue-400 to-blue-500",
+    note: "Pet Hair Removal +$20 • Third Row Seat +$20", popular: false, color: "from-blue-400 to-blue-500",
     image: "/interior-detail.webp",
   },
 ];
